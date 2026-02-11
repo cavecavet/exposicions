@@ -1,17 +1,137 @@
 [
-  { "cardId": "01FC05", "photoId": "FotosCavet00005", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "02FC08", "photoId": "FotosCavet00008", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "03FC12", "photoId": "FotosCavet00012", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "04FC15", "photoId": "FotosCavet00015", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "05FC06", "photoId": "FotosCavet00006", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "06FC04", "photoId": "FotosCavet00004", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "07FC02", "photoId": "FotosCavet00002", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "08FC07", "photoId": "FotosCavet00007", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "09FC01", "photoId": "FotosCavet00001", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "10FC20", "photoId": "FotosCavet00020", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "11FC43", "photoId": "FotosCavet00043", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "12FC45", "photoId": "FotosCavet00045", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "13FC03", "photoId": "FotosCavet00003", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "14FC30", "photoId": "FotosCavet00030", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" },
-  { "cardId": "15FC34", "photoId": "FotosCavet00034", "commonName": "", "scientificName": "", "comment": "", "fotoAuthor": "", "cardAuthor": "" }
+  {
+    "cardId": "01FC05",
+    "photoId": "FotosCavet00005",
+    "commonName": "Godiva taronja",
+    "scientificName": "Nemesignis banyulensis",
+    "comment": "¿Com és?\nÉs un dels nudibranquis més grans del Mediterrani, ja que pot arribar als 7 cm de llargada. Presenta una coloració taronja molt viva, amb les puntes de les cerates —les expansions laterals— de color vermell. El seu cos està recorregut per tres línies blanques molt distintives: dues de laterals, situades sota les cerates, i una de central que es bifurca a la zona del cap. Els rinòfors, òrgans sensorials amb forma de banyes que utilitza per detectar substàncies químiques, són anellats, de color taronja i més curts que els apèndixs bucals.\n\nOn viu?\nHabita en fons rocosos entre els 5 i els 35 metres de profunditat. És habitual trobar-lo sobre hidroïdeus, especialment del gènere Eudendrium. Es considera una espècie endèmica del Mediterrani, ja que la seva distribució natural es limita principalment a aquesta zona.\n\nCuriositat\nFins fa relativament poc, aquesta espècie era coneguda amb el nom de Godiva banyulensis.\nEl nom Nemesignis sembla tenir un doble origen: fa referència a la deessa grega Nèmesi i al terme llatí ignis (“foc”), en al·lusió a l’aspecte flamejant de les cerates.\nL’epítet banyulensis prové del lloc on va ser descrita per primera vegada: la regió de Banyuls-sur-Mer.\nTot i ser considerada endèmica del Mediterrani, existeixen registres confirmats de la seva presència a l’Algarve (Portugal) i algunes cites no verificades a la costa cantàbrica.",
+    "fotoAuthor": "Xavier Salvador",
+    "cardAuthor": "Jose Manuel Dorado Gonzalez"
+  },
+  {
+    "cardId": "02FC08",
+    "photoId": "FotosCavet00008",
+    "commonName": "",
+    "scientificName": "Xyrichthys novacula",
+    "comment": "",
+    "fotoAuthor": "Xavier Salvador",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "03FC12",
+    "photoId": "FotosCavet00012",
+    "commonName": "",
+    "scientificName": "Octopus vulgaris",
+    "comment": "",
+    "fotoAuthor": "Mª C. Gago",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "04FC15",
+    "photoId": "FotosCavet00015",
+    "commonName": "",
+    "scientificName": "Echinaster sepositus",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "05FC06",
+    "photoId": "FotosCavet00006",
+    "commonName": "",
+    "scientificName": "Parablennius pilicornis",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "06FC04",
+    "photoId": "FotosCavet00004",
+    "commonName": "",
+    "scientificName": "Percnon gibbesi",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "07FC02",
+    "photoId": "FotosCavet00002",
+    "commonName": "",
+    "scientificName": "Pelagia noctiluca",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "08FC07",
+    "photoId": "FotosCavet00007",
+    "commonName": "",
+    "scientificName": "Syngnathus abaster",
+    "comment": "",
+    "fotoAuthor": "Xavier Salvador",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "09FC01",
+    "photoId": "FotosCavet00001",
+    "commonName": "",
+    "scientificName": "Aristeus antennatus",
+    "comment": "",
+    "fotoAuthor": "Miguel Pérez",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "10FC20",
+    "photoId": "FotosCavet00020",
+    "commonName": "",
+    "scientificName": "Posidonia oceanica",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "11FC43",
+    "photoId": "FotosCavet00043",
+    "commonName": "",
+    "scientificName": "Coris julis",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "12FC45",
+    "photoId": "FotosCavet00045",
+    "commonName": "",
+    "scientificName": "Muraena helena",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "13FC03",
+    "photoId": "FotosCavet00003",
+    "commonName": "",
+    "scientificName": "Coscinasterias tenuispina",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "14FC30",
+    "photoId": "FotosCavet00030",
+    "commonName": "",
+    "scientificName": "Actinia equina",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "15FC34",
+    "photoId": "FotosCavet00034",
+    "commonName": "",
+    "scientificName": "Chromis chromis",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  }
 ]
