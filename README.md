@@ -1,26 +1,44 @@
-# CardEditor
+# Exposició FotosCavet
 
-Editor de fitxes per a **FotosCavet**. Aplicació web on els usuaris poden "adoptar" una fotografia i completar-ne la fitxa amb el nom comú, nom científic i un comentari.
+Web estàtica per a l'exposició **FotosCavet**. Cada fitxa d'espècie marina té la seva pròpia URL, pensada per ser accessible mitjançant codis QR.
 
 - Hosting: **GitHub Pages**
-- Backend: **Google Apps Script** (Google Sheets com a base de dades)
-- Autenticació: usuaris gestionats al full de càlcul
+- Dades: fitxers JSON estàtics (sense backend)
+- Autenticació: no requerida
 
 ## Estructura
 
 ```
 / (arrel del repo)
-├── index.html                          # Aplicació (login + galeria + editor)
+├── index.html                          # Aplicació (galeria + landing + detall)
+├── cards.json                          # Dades de les 15 fitxes
 ├── images.json                         # Manifest de les imatges
 ├── images/                             # Fotografies
-├── google_apps_script.js               # Codi del backend (Apps Script)
 └── .github/workflows/deploy-pages.yml  # Desplegament automàtic a GitHub Pages
 ```
 
 ## Funcionament
 
-1. L'usuari inicia sessió amb les credencials del full de càlcul.
-2. Veu una graella amb totes les fotografies i el seu estat (lliure, adoptada per ell o per un altre).
-3. Pot fer clic en una fotografia lliure per **adoptar-la** i omplir la fitxa.
-4. Pot editar les seves fitxes o **alliberar-les** perquè un altre usuari les adopti.
+1. **Galeria** (`#/`): mostra totes les fitxes en una graella. Fent clic a qualsevol fotografia s'accedeix a la seva fitxa.
+2. **Landing** (`#/fitxa/CARD_ID`): pàgina informativa del projecte amb un botó per veure la fitxa. Aquesta és la URL que s'inclou als codis QR.
+3. **Detall**: mostra la fotografia, nom comú, nom científic, comentari, autor de la foto i autor de la fitxa.
 
+## Codis QR
+
+Cada codi QR apunta a una URL amb el format:
+
+```
+https://<el-teu-domini>/#/fitxa/CARD_ID
+```
+
+Per exemple: `https://<el-teu-domini>/#/fitxa/01FC05`
+
+## Editar les dades
+
+Les dades de les fitxes es troben a `cards.json`. Per actualitzar-les, edita els camps de cada entrada:
+
+- `commonName` — Nom comú de l'espècie
+- `scientificName` — Nom científic
+- `comment` — Comentari descriptiu
+- `fotoAuthor` — Autor de la fotografia
+- `cardAuthor` — Autor de la fitxa
