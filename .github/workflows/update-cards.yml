@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pages: write
+      id-token: write
 
     steps:
       - name: Checkout
@@ -23,11 +25,32 @@ jobs:
       - name: Fetch cards from Google Sheets
         run: python3 update_cards.py
 
-      - name: Commit and push if changed
+      - name: Check for changes
+        id: changes
         run: |
-          git diff --quiet cards.json && echo "No changes" && exit 0
+          if git diff --quiet cards.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Changes detected"
+          fi
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add cards.json
           git commit -m "Update cards.json from Google Sheets"
           git push
+
+      - name: Upload Pages artifact
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/deploy-pages@v4
