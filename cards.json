@@ -20,7 +20,7 @@
   {
     "cardId": "03FC12",
     "photoId": "FotosCavet00012",
-    "commonName": "pop comú",
+    "commonName": "Pop comú",
     "scientificName": "Octopus vulgaris",
     "comment": "TAXONIMIA:\n\nSuperregne:\tHolozoa\nRegne:\tAnimalia\nFílum:\tMollusca\nClasse:\tCephalopoda\nSubclasse:\tColeoidea\nSuperordre:\tOctopodiformes\nOrdre:\tOctopoda\nFamília:\tOctopodidae\nGènere:\tOctopus\nEspècie:\tOctopus vulgaris\n\nDESCRIPCIÓ MORFOLÒGICA:\n\n El mantell fa fins a 25 cm de llargada i amb els braços un total d'1 metre. S'alimenta principalment de crancs i mol·lusc bivalves, però menja gairebé qualsevol animal que pugui capturar, incloent-hi de la seua pròpia espècie. Pot canviar de color. Com els pops en general, són animals relativament intel·ligents.\n\nHABITAT:\nLa seva distribució natural va des del mar Mediterrani i les costes del sud d'Anglaterra fins al Senegal. \n\nAPARELLAMENT:\n\nEl mascle utilitza un braç especialitzat anomenat hectocòtil per transferir els espermatòfors (paquets d’esperma) a la femella.\n\nLa fecundació és interna.\n\nDesprés de l’aparellament, el mascle sol morir al cap de poc temps.\n\nPOSTA D'OUS:\n\nLa femella pot pondre entre 100.000 i 500.000 ous, depenent de la mida i condicions ambientals.\n\nDiposita els ous en coves o escletxes rocoses, agrupats en forma de petits raïms.\n\nEls ous queden fixats al substrat mitjançant filaments.\n\nCURA PARENTAL:\n\nLa femella protegeix i ventila els ous constantment amb els seus braços per oxigenar-los i mantenir-los nets.\n\nDurant aquest període (que pot durar 1–2 mesos, segons la temperatura de l’aigua), no s’alimenta.\n\nUn cop els ous eclosionen, la femella mor poc després.\n\nDESENVOLUPAMENT:\n\nLes cries neixen en fase paralarvària (formes petites i planctòniques).\n\nInicialment viuen a la columna d’aigua com a part del plàncton.\n\nA mesura que creixen, baixen al fons marí i adopten el comportament bentònic típic dels adults.\n\nLa reproducció de l’Octopus vulgaris és un exemple de semelparitat, és a dir, l’animal es reprodueix una sola vegada a la vida abans de morir.\n\nSi vols, puc explicar també les diferències reproductives amb altres espècies de pops o detalls hormonals del procés.\n\n\n",
     "fotoAuthor": "Mª C. Gago",
@@ -47,7 +47,7 @@
   {
     "cardId": "06FC04",
     "photoId": "FotosCavet00004",
-    "commonName": " Cranc aranya atlàntic o Cranc corredor",
+    "commonName": "Cranc aranya atlàntic o Cranc corredor",
     "scientificName": "Percnon gibbesi",
     "comment": "Percnon gibbesi, conegut com a cranc aranya atlàntic o cranc corredor, és un crustaci de la família Percnidae. És un cranc de cos aplanat i potes molt llargues i primes que li permeten moure’s amb gran rapidesa sobre roques. La closca mesura aproximadament entre 4 i 5 cm i presenta una coloració marronosa amb línies groguenques que li serveixen de camuflatge.\n\nÉs originari de l’Atlàntic tropical, però actualment està molt estès al mar Mediterrani, on és considerat una espècie invasora. Viu en zones rocoses del litoral, des de poca profunditat fins als 30 metres, especialment en àrees amb fort onatge.\n\nS’alimenta principalment d’algues, tot i que també pot consumir petits invertebrats. Es reprodueix sobretot a la primavera i estiu; les femelles porten els ous sota l’abdomen i les larves són planctòniques, fet que facilita la seva expansió.\n\nÉs important ecològicament perquè forma part de la cadena alimentària, però al Mediterrani pot competir amb espècies autòctones i alterar l’equilibri de l’ecosistema.",
     "fotoAuthor": "Assoc. Cave Cavet",
@@ -133,5 +133,131 @@
     "comment": "La castanyola (Chromis chromis) és un peix petit i molt abundant al mar Mediterrani. Pertany a la família dels pomacèntrids i és molt habitual veure-la nedant en bancs nombrosos prop de les roques, penya-segats submarins o esculls.\n\nNormalment mesura entre 10 i 15 cm de llargada. Els adults són de color marró fosc o gairebé negre, mentre que els juvenils tenen un blau elèctric molt intens que els fa destacar molt sota l’aigua. Té el cos ovalat i una cua lleugerament bifurcada, adaptada a nedar de manera àgil.\n\nViu principalment en zones rocoses i també a prop de praderies de Posidonia oceanica, des de pocs metres de profunditat fins aproximadament als 40 metres. S’alimenta sobretot de plàncton, que captura mentre neda en grup a mitja aigua.\n\nÉs una espècie important dins l’ecosistema marí, ja que forma part de la cadena alimentària: s’alimenta de petits organismes i, al mateix temps, serveix d’aliment a peixos més grans. Tot i que no té gaire interès comercial, és una de les espècies més representatives i fàcils d’observar a la Mediterrània.",
     "fotoAuthor": "Assoc. Cave Cavet",
     "cardAuthor": "Guillem González Wiehoff"
+  },
+  {
+    "cardId": "16FC101",
+    "photoId": "Expo00006",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC102",
+    "photoId": "Expo00007",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC103",
+    "photoId": "Expo00015",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC104",
+    "photoId": "Expo00023",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC105",
+    "photoId": "Expo00029",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC106",
+    "photoId": "Expo00034",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC107",
+    "photoId": "Expo00048",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC108",
+    "photoId": "Expo00059",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC109",
+    "photoId": "Expo00060",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC110",
+    "photoId": "Expo00065",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC111",
+    "photoId": "Expo00068",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC112",
+    "photoId": "Expo00070",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC113",
+    "photoId": "Expo00073",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
+  },
+  {
+    "cardId": "16FC114",
+    "photoId": "Expo00074",
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "Assoc. Cave Cavet",
+    "cardAuthor": ""
   }
 ]
