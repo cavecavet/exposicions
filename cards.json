@@ -18,15 +18,6 @@
     "cardAuthor": "Jordi Castelló Soler"
   },
   {
-    "cardId": "03FC12",
-    "photoId": "FotosCavet00012",
-    "commonName": "Pop comú",
-    "scientificName": "Octopus vulgaris",
-    "comment": "TAXONIMIA:\n\nSuperregne:\tHolozoa\nRegne:\tAnimalia\nFílum:\tMollusca\nClasse:\tCephalopoda\nSubclasse:\tColeoidea\nSuperordre:\tOctopodiformes\nOrdre:\tOctopoda\nFamília:\tOctopodidae\nGènere:\tOctopus\nEspècie:\tOctopus vulgaris\n\nDESCRIPCIÓ MORFOLÒGICA:\n\n El mantell fa fins a 25 cm de llargada i amb els braços un total d'1 metre. S'alimenta principalment de crancs i mol·lusc bivalves, però menja gairebé qualsevol animal que pugui capturar, incloent-hi de la seua pròpia espècie. Pot canviar de color. Com els pops en general, són animals relativament intel·ligents.\n\nHABITAT:\nLa seva distribució natural va des del mar Mediterrani i les costes del sud d'Anglaterra fins al Senegal. \n\nAPARELLAMENT:\n\nEl mascle utilitza un braç especialitzat anomenat hectocòtil per transferir els espermatòfors (paquets d’esperma) a la femella.\n\nLa fecundació és interna.\n\nDesprés de l’aparellament, el mascle sol morir al cap de poc temps.\n\nPOSTA D'OUS:\n\nLa femella pot pondre entre 100.000 i 500.000 ous, depenent de la mida i condicions ambientals.\n\nDiposita els ous en coves o escletxes rocoses, agrupats en forma de petits raïms.\n\nEls ous queden fixats al substrat mitjançant filaments.\n\nCURA PARENTAL:\n\nLa femella protegeix i ventila els ous constantment amb els seus braços per oxigenar-los i mantenir-los nets.\n\nDurant aquest període (que pot durar 1–2 mesos, segons la temperatura de l’aigua), no s’alimenta.\n\nUn cop els ous eclosionen, la femella mor poc després.\n\nDESENVOLUPAMENT:\n\nLes cries neixen en fase paralarvària (formes petites i planctòniques).\n\nInicialment viuen a la columna d’aigua com a part del plàncton.\n\nA mesura que creixen, baixen al fons marí i adopten el comportament bentònic típic dels adults.\n\nLa reproducció de l’Octopus vulgaris és un exemple de semelparitat, és a dir, l’animal es reprodueix una sola vegada a la vida abans de morir.\n\nSi vols, puc explicar també les diferències reproductives amb altres espècies de pops o detalls hormonals del procés.\n\n\n",
-    "fotoAuthor": "Mª C. Gago",
-    "cardAuthor": "Joel Obis Sabat"
-  },
-  {
     "cardId": "04FC15",
     "photoId": "FotosCavet00015",
     "commonName": "Estrella de mar vermella",
@@ -101,11 +92,11 @@
   {
     "cardId": "12FC45",
     "photoId": "FotosCavet00045",
-    "commonName": "Morena fosc",
-    "scientificName": "Muraena helena",
-    "comment": "1. Classificació Taxonòmica\n\nRegne: Animalia\nFílum: Chordata\nClasse: Actinopterygii (peixos amb aletes radiades)\nOrdre:  Anguilliformes (forma d'anguila)\nFamília: Muraenidae\nGènere: Muraena\nEspècie: Muraena helena\n\n 2. Descripció Morfològica\n\nCos: Allargat i comprimit lateralment (anguil·liforme). Pot arribar als 1,5 metres.\nPell: Gruixuda i sense escates, coberta d'una mucosa protectora.\nColoració: Marró fosc o violaci amb taques groguenques o blanques que formen un disseny de \"marbre\".\nCap: Morro curt amb mandíbules potents i dents llargues i esmolades dirigides cap enrere.\nAletes:No té aletes pectorals ni ventrals. L'aleta dorsal, caudal i anal estan fusionades en una sola cresta.\n\n 3. Hàbitat i Alimentació\n\nHàbitat: Viu en fons rocosos i esculls de corall, des de la superfície fins als 100 metres de profunditat. Li agrada amagar-se en esquerdes i coves durant el dia.\nDieta: És un carnívor depredador. Menja principalment:\nPeixos de roca.\nCefalòpodes (pulpis, sípies).\nCrustacis.\n\n\nCaça:És majoritàriament nocturna. Utilitza el seu excel·lent olfacte, ja que la seva vista és bastant limitada.\n\n 4. Reproducció\n\nTipus: Ovípara (pon d'ous).\nÈpoca: Es reprodueix durant l'estiu (juliol-setembre).\nLarves: Les cries passen per una fase anomenada leptocèfal (larves transparents en forma de fulla) que suren a la deriva amb el corrent abans de transformar-se en petites morenes i baixar al fons.\n\n 5. Adaptació al Medi\n\nRespiració:Ha de mantenir la boca oberta constantment per bombar aigua cap a les brànquies (sovint es confon amb una actitud agressiva, però és vital per respirar).\nMandíbula faríngia: Té un segon joc de mandíbules a la gola que surten cap endavant per agafar la presa i arrossegar-la cap a l'esòfag.\nMucosa: La seva pell genera un moc que la protegeix de ferides contra les roques i de paràsits.\n\n 6. Importància Ecològica i Relació amb l'Ésser Humà\n\nEcològica: Actua com a regulador de poblacions. En menjar pops i crustacis, manté l'equilibri de l'ecosistema de l'escull.\nGastronomia: Tradicionalment s'ha consumit (especialment a l'antiga Roma, on eren molt preuades), tot i que la seva carn té moltes espines.\nPerillositat: No és un animal agressiu per naturalesa, però la seva mordida és perillosa per la força i la possible infecció (pels residus de menjar a les dents), no perquè tingui verí a les glàndules (tot i que la seva sang conté toxines).",
-    "fotoAuthor": "Assoc. Cave Cavet",
-    "cardAuthor": "Jon Fàbregas Gil"
+    "commonName": "",
+    "scientificName": "",
+    "comment": "",
+    "fotoAuthor": "",
+    "cardAuthor": ""
   },
   {
     "cardId": "13FC03",
@@ -164,11 +155,11 @@
   {
     "cardId": "16FC104",
     "photoId": "Expo00023",
-    "commonName": "",
-    "scientificName": "",
-    "comment": "",
-    "fotoAuthor": "Assoc. Cave Cavet",
-    "cardAuthor": ""
+    "commonName": "Pop comú",
+    "scientificName": "Octopus vulgaris",
+    "comment": "TAXONIMIA:\n\nSuperregne:\tHolozoa\nRegne:\tAnimalia\nFílum:\tMollusca\nClasse:\tCephalopoda\nSubclasse:\tColeoidea\nSuperordre:\tOctopodiformes\nOrdre:\tOctopoda\nFamília:\tOctopodidae\nGènere:\tOctopus\nEspècie:\tOctopus vulgaris\n\nDESCRIPCIÓ MORFOLÒGICA:\n\n El mantell fa fins a 25 cm de llargada i amb els braços un total d'1 metre. S'alimenta principalment de crancs i mol·lusc bivalves, però menja gairebé qualsevol animal que pugui capturar, incloent-hi de la seua pròpia espècie. Pot canviar de color. Com els pops en general, són animals relativament intel·ligents.\n\nHABITAT:\nLa seva distribució natural va des del mar Mediterrani i les costes del sud d'Anglaterra fins al Senegal. \n\nAPARELLAMENT:\n\nEl mascle utilitza un braç especialitzat anomenat hectocòtil per transferir els espermatòfors (paquets d’esperma) a la femella.\n\nLa fecundació és interna.\n\nDesprés de l’aparellament, el mascle sol morir al cap de poc temps.\n\nPOSTA D'OUS:\n\nLa femella pot pondre entre 100.000 i 500.000 ous, depenent de la mida i condicions ambientals.\n\nDiposita els ous en coves o escletxes rocoses, agrupats en forma de petits raïms.\n\nEls ous queden fixats al substrat mitjançant filaments.\n\nCURA PARENTAL:\n\nLa femella protegeix i ventila els ous constantment amb els seus braços per oxigenar-los i mantenir-los nets.\n\nDurant aquest període (que pot durar 1–2 mesos, segons la temperatura de l’aigua), no s’alimenta.\n\nUn cop els ous eclosionen, la femella mor poc després.\n\nDESENVOLUPAMENT:\n\nLes cries neixen en fase paralarvària (formes petites i planctòniques).\n\nInicialment viuen a la columna d’aigua com a part del plàncton.\n\nA mesura que creixen, baixen al fons marí i adopten el comportament bentònic típic dels adults.\n\nLa reproducció de l’Octopus vulgaris és un exemple de semelparitat, és a dir, l’animal es reprodueix una sola vegada a la vida abans de morir.\n\nSi vols, puc explicar també les diferències reproductives amb altres espècies de pops o detalls hormonals del procés.\n\n\n",
+    "fotoAuthor": "Mª C. Gago",
+    "cardAuthor": "Joel Obis Sabat"
   },
   {
     "cardId": "16FC105",
@@ -191,15 +182,15 @@
   {
     "cardId": "16FC107",
     "photoId": "Expo00048",
-    "commonName": "",
-    "scientificName": "",
-    "comment": "",
+    "commonName": "Morena fosc",
+    "scientificName": "Muraena helena",
+    "comment": "1. Classificació Taxonòmica\n\nRegne: Animalia\nFílum: Chordata\nClasse: Actinopterygii (peixos amb aletes radiades)\nOrdre:  Anguilliformes (forma d'anguila)\nFamília: Muraenidae\nGènere: Muraena\nEspècie: Muraena helena\n\n 2. Descripció Morfològica\n\nCos: Allargat i comprimit lateralment (anguil·liforme). Pot arribar als 1,5 metres.\nPell: Gruixuda i sense escates, coberta d'una mucosa protectora.\nColoració: Marró fosc o violaci amb taques groguenques o blanques que formen un disseny de \"marbre\".\nCap: Morro curt amb mandíbules potents i dents llargues i esmolades dirigides cap enrere.\nAletes:No té aletes pectorals ni ventrals. L'aleta dorsal, caudal i anal estan fusionades en una sola cresta.\n\n 3. Hàbitat i Alimentació\n\nHàbitat: Viu en fons rocosos i esculls de corall, des de la superfície fins als 100 metres de profunditat. Li agrada amagar-se en esquerdes i coves durant el dia.\nDieta: És un carnívor depredador. Menja principalment:\nPeixos de roca.\nCefalòpodes (pulpis, sípies).\nCrustacis.\n\n\nCaça:És majoritàriament nocturna. Utilitza el seu excel·lent olfacte, ja que la seva vista és bastant limitada.\n\n 4. Reproducció\n\nTipus: Ovípara (pon d'ous).\nÈpoca: Es reprodueix durant l'estiu (juliol-setembre).\nLarves: Les cries passen per una fase anomenada leptocèfal (larves transparents en forma de fulla) que suren a la deriva amb el corrent abans de transformar-se en petites morenes i baixar al fons.\n\n 5. Adaptació al Medi\n\nRespiració:Ha de mantenir la boca oberta constantment per bombar aigua cap a les brànquies (sovint es confon amb una actitud agressiva, però és vital per respirar).\nMandíbula faríngia: Té un segon joc de mandíbules a la gola que surten cap endavant per agafar la presa i arrossegar-la cap a l'esòfag.\nMucosa: La seva pell genera un moc que la protegeix de ferides contra les roques i de paràsits.\n\n 6. Importància Ecològica i Relació amb l'Ésser Humà\n\nEcològica: Actua com a regulador de poblacions. En menjar pops i crustacis, manté l'equilibri de l'ecosistema de l'escull.\nGastronomia: Tradicionalment s'ha consumit (especialment a l'antiga Roma, on eren molt preuades), tot i que la seva carn té moltes espines.\nPerillositat: No és un animal agressiu per naturalesa, però la seva mordida és perillosa per la força i la possible infecció (pels residus de menjar a les dents), no perquè tingui verí a les glàndules (tot i que la seva sang conté toxines).",
     "fotoAuthor": "Assoc. Cave Cavet",
-    "cardAuthor": ""
+    "cardAuthor": "Jon Fàbregas Gil"
   },
   {
     "cardId": "16FC108",
-    "photoId": "Expo00059",
+    "photoId": "Expo00025",
     "commonName": "",
     "scientificName": "",
     "comment": "",
