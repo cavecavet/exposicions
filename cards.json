@@ -57,7 +57,7 @@
     "cardId": "09FC01",
     "photoId": "FotosCavet00001",
     "commonName": "",
-    "scientificName": "Aristeus antennatus",
+    "scientificName": "Palaemon elegans",
     "comment": "",
     "fotoAuthor": "Miguel Pérez",
     "cardAuthor": ""
@@ -65,7 +65,7 @@
   {
     "cardId": "10FC20",
     "photoId": "FotosCavet00020",
-    "commonName": "Altina",
+    "commonName": "",
     "scientificName": "Posidonia oceanica",
     "comment": "",
     "fotoAuthor": "Assoc. Cave Cavet",
@@ -83,7 +83,7 @@
   {
     "cardId": "16FC102",
     "photoId": "Expo00007",
-    "commonName": "Rabosa morruda ",
+    "commonName": "",
     "scientificName": "Tripterygion tripteronotum",
     "comment": "",
     "fotoAuthor": "Assoc. Cave Cavet",
@@ -110,7 +110,7 @@
   {
     "cardId": "16FC105",
     "photoId": "Expo00029",
-    "commonName": "Salpa",
+    "commonName": "",
     "scientificName": "Sarpa salpa ",
     "comment": "",
     "fotoAuthor": "Assoc. Cave Cavet",
@@ -119,7 +119,7 @@
   {
     "cardId": "16FC106",
     "photoId": "Expo00034",
-    "commonName": "Ortiga de mar",
+    "commonName": "",
     "scientificName": "Anemonia viridis",
     "comment": "",
     "fotoAuthor": "Assoc. Cave Cavet",
@@ -138,7 +138,7 @@
     "cardId": "16FC108",
     "photoId": "Expo00025",
     "commonName": "",
-    "scientificName": "",
+    "scientificName": "Sarpa salpa ",
     "comment": "",
     "fotoAuthor": "Assoc. Cave Cavet",
     "cardAuthor": ""
@@ -173,7 +173,7 @@
   {
     "cardId": "16FC112",
     "photoId": "Expo00070",
-    "commonName": "Medusa ou ferrat",
+    "commonName": "",
     "scientificName": "Cotylorhiza tuberculata",
     "comment": "",
     "fotoAuthor": "Assoc. Cave Cavet",
@@ -191,7 +191,7 @@
   {
     "cardId": "16FC114",
     "photoId": "Expo00074",
-    "commonName": "Llebre de mar ",
+    "commonName": "",
     "scientificName": "Aplysia depilans",
     "comment": "",
     "fotoAuthor": "Assoc. Cave Cavet",
