@@ -128,6 +128,29 @@ body {
   text-decoration: underline;
 }
 
+@media (max-width: 600px) {
+  .site-footer {
+    padding: 10px 12px;
+  }
+
+  .site-footer-logos {
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .site-footer-logos img {
+    height: 20px;
+  }
+
+  .site-footer-logos img.logo-urv {
+    height: 30px;
+  }
+
+  .site-footer p {
+    font-size: 11px;
+  }
+}
+
 /* Gallery */
 .gallery-container {
   padding: 20px;
