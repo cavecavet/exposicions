@@ -4,4 +4,5 @@ Logo2.png - Universitat Rovira i Virgili - https://www.urv.cat
 Logo3.jpg - Institut d'Horticultura i Jardineria de Reus - https://www.hortojardi.com
 Logo4.png - MINKA - https://minka-sdg.org
 Logo5.png - Institut d'Hoteleria i Turisme de Cambrils - https://www.inshotturcambrils.com/
-Logo6.png - Diputació de Tarragona - https://www.dipta.cat/
+Logo6.png - Símbiosy - https://simbiosy.com/
+Logo7.png - Diputació de Tarragona - https://www.dipta.cat/

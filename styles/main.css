@@ -60,6 +60,25 @@ body {
   text-align: right;
 }
 
+.site-header-instagram {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #c13584;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-header-instagram img {
+  height: 24px;
+  width: 24px;
+}
+
+.site-header-instagram:hover {
+  text-decoration: underline;
+}
+
 /* Site Footer */
 .site-footer {
   background: white;
@@ -162,11 +181,27 @@ body {
 
 /* Landing page (QR entry) */
 .landing-container {
+  position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100vh;
   padding: 20px;
+  padding-top: 60px;
+}
+
+.landing-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('../images/Expo00015.JPG') center / cover no-repeat;
+  opacity: 0.34;
+  z-index: 0;
+}
+
+.landing-container > * {
+  position: relative;
+  z-index: 1;
 }
 
 .landing-box {
@@ -175,15 +210,10 @@ body {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   padding: 40px;
   width: 100%;
-  max-width: 500px;
+  max-width: 1000px;
   text-align: center;
 }
 
-.landing-box h1 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 28px;
-}
 
 .landing-description {
   background: #e8f4f8;
