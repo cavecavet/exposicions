@@ -19,17 +19,21 @@ Requisits previs:
 """
 
 import argparse
+import json
+import mimetypes
 from pathlib import Path
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 
 SCRIPT_DIR = Path(__file__).parent
 REPO_DIR = SCRIPT_DIR.parent
 OAUTH_CLIENT_FILE = SCRIPT_DIR / "oauth_client.json"
 TOKEN_FILE = SCRIPT_DIR / "token.json"
+IMAGE_CACHE_FILE = SCRIPT_DIR / "image_cache.json"   # photo_id → drive url
 QR_DIR = REPO_DIR / "images" / "qrs"
 
 SPREADSHEET_ID = "11RKl2Uhu4eAJlKvcAQQajR0bGeAaHMekDOw8CtU5DiI"
@@ -42,21 +46,69 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive",
 ]
 
-# Variants de nom de columna (català / castellà / anglès)
+# Variants de nom de columna (case-insensitive)
 FIELD_VARIANTS = {
     "year":       ["any", "año", "year"],
-    "technique":  ["tècnica", "técnica", "technique"],
+    "technique":  ["técnica", "tècnica", "technique"],
     "dimensions": ["dimensions", "dimensiones"],
-    "location":   ["lloc", "lugar", "location", "localització", "localización"],
+    "location":   ["lloc", "lugar", "location"],
 }
 
 
 def get_field(card: dict, key: str) -> str:
+    """Cerca el camp de forma case-insensitive."""
+    lower_card = {k.lower(): v for k, v in card.items()}
     for variant in FIELD_VARIANTS.get(key, [key]):
-        val = card.get(variant, "").strip()
+        val = lower_card.get(variant.lower(), "").strip()
         if val:
             return val
     return ""
+
+
+def load_image_cache() -> dict:
+    if IMAGE_CACHE_FILE.exists():
+        return json.loads(IMAGE_CACHE_FILE.read_text())
+    return {}
+
+
+def save_image_cache(cache: dict) -> None:
+    IMAGE_CACHE_FILE.write_text(json.dumps(cache, indent=2, ensure_ascii=False))
+
+
+def get_drive_image_url(drive_svc, file_id: str, cache: dict, image_id: str) -> str:
+    """Puja una imatge a Drive (si no hi és al cache) i retorna una URL pública."""
+    if image_id in cache:
+        return cache[image_id]
+
+    local_path = None
+    for ext in ("jpg", "JPG", "jpeg", "JPEG", "png", "PNG"):
+        p = REPO_DIR / "images" / f"{image_id}.{ext}"
+        if p.exists():
+            local_path = p
+            break
+
+    if not local_path:
+        return None
+
+    mime = mimetypes.guess_type(str(local_path))[0] or "image/jpeg"
+    media = MediaFileUpload(str(local_path), mimetype=mime)
+    uploaded = drive_svc.files().create(
+        body={"name": local_path.name},
+        media_body=media,
+        fields="id",
+    ).execute()
+    drive_file_id = uploaded["id"]
+
+    # Fer el fitxer públicament accessible
+    drive_svc.permissions().create(
+        fileId=drive_file_id,
+        body={"type": "anyone", "role": "reader"},
+    ).execute()
+
+    url = f"https://drive.google.com/uc?id={drive_file_id}"
+    cache[image_id] = url
+    save_image_cache(cache)
+    return url
 
 
 def get_services():
@@ -105,90 +157,114 @@ def read_cards(sheets_svc) -> list[dict]:
     return cards
 
 
-def build_content(card: dict) -> list[tuple[str, str | None]]:
-    """
-    Retorna una llista de (text, estil) per construir el doc.
-    Estils: 'title' (H1), 'italic', None (normal).
-    L'últim element és sempre "\n" i serveix com a paràgraf per al QR.
-    """
+def delete_existing_docs(drive_svc, name: str, folder_id: str | None) -> int:
+    """Elimina tots els Google Docs amb el nom indicat. Retorna el nombre eliminats."""
+    q = f"name = '{name}' and mimeType = 'application/vnd.google-apps.document' and trashed = false"
+    if folder_id:
+        q += f" and '{folder_id}' in parents"
+    result = drive_svc.files().list(q=q, fields="files(id)").execute()
+    deleted = 0
+    for f in result.get("files", []):
+        drive_svc.files().delete(fileId=f["id"]).execute()
+        deleted += 1
+    return deleted
+
+
+def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_cache: dict, overwrite: bool = False) -> str:
+    card_id         = card.get("cardId", "desconegut").strip()
+    if overwrite:
+        n = delete_existing_docs(drive_svc, card_id, folder_id)
+        if n:
+            print(f"(esborrats {n})", end=" ")
     artistic_name   = card.get("Nombre artístico", "").strip()
     common_name     = card.get("commonName", "").strip()
     scientific_name = card.get("scientificName", "").strip()
     foto_author     = card.get("fotoAuthor", "").strip()
     card_author     = card.get("cardAuthor", "").strip()
-    comment         = card.get("comment", "").strip()
+    photo_id        = (card.get("Imatge") or card.get("photoId") or "").strip()
     year            = get_field(card, "year")
     technique       = get_field(card, "technique")
     dimensions      = get_field(card, "dimensions")
     location        = get_field(card, "location")
 
-    lines: list[tuple[str, str | None]] = []
+    # ── Chunks: (text, bold, italic, heading, marker) ────────────────────
+    # marker: 'photo' | 'qr' | None
+    chunks: list[tuple[str, bool, bool, bool, str | None]] = []
 
-    # Títol artístic en H1
+    def add(text, bold=False, italic=False, heading=False, marker=None):
+        chunks.append((text, bold, italic, heading, marker))
+
+    def field(label, value, italic_val=False):
+        if value:
+            add(label + ": ", bold=True)
+            add(value + "\n", italic=italic_val)
+
     if artistic_name:
-        lines.append((artistic_name + "\n", "title"))
+        add(artistic_name + "\n", heading=True)
+    add("\n", marker="photo")   # paràgraf buit → foto s'insereix aquí
+    add("\n")                   # línia en blanc
 
-    # Nom comú i científic en estil normal/italic
-    if common_name:
-        lines.append((common_name + "\n", None))
-    if scientific_name:
-        lines.append((scientific_name + "\n", "italic"))
+    field("Nom comú", common_name)
+    field("Nom científic", scientific_name, italic_val=True)
+    field("Autor fotografia", foto_author)
+    if year:       field("Any", year)
+    if technique:  field("Tècnica", technique)
+    if dimensions: field("Dimensions", dimensions)
+    if location:   field("Lloc", location)
+    field("Autor fitxa", card_author)
 
-    lines.append(("\n", None))  # línia en blanc
+    add("\n")               # línia en blanc
+    add("\n", marker="qr")  # paràgraf buit → QR s'insereix aquí
 
-    # Metadades
-    if foto_author:
-        lines.append((foto_author + "\n", None))
-    if year:
-        lines.append((year + "\n", None))
-    if technique:
-        lines.append((technique + "\n", None))
-    if dimensions:
-        lines.append((dimensions + "\n", None))
-    if location:
-        lines.append((location + "\n", None))
-    if card_author:
-        lines.append((card_author + "\n", None))
+    # ── Compute positions ─────────────────────────────────────────────────
+    full_text = "".join(c[0] for c in chunks)
+    photo_idx = qr_idx = None
+    pos = 1
+    for text, _, _, _, marker in chunks:
+        if marker == "photo":
+            photo_idx = pos
+        elif marker == "qr":
+            qr_idx = pos
+        pos += len(text)
 
-    lines.append(("\n", None))  # línia en blanc
-
-    # Comentari en cursiva
-    if comment:
-        lines.append((comment + "\n", "italic"))
-
-    # Paràgraf final buit: aquí s'inserirà la imatge QR
-    lines.append(("\n", None))
-
-    return lines
-
-
-def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None) -> str:
-    card_id = card.get("cardId", "desconegut").strip()
-    lines = build_content(card)
-    full_text = "".join(text for text, _ in lines)
-
-    # Crear el document
-    doc = docs_svc.documents().create(body={"title": card_id}).execute()
-    doc_id = doc["documentId"]
-
+    # ── API requests ──────────────────────────────────────────────────────
     requests = []
 
-    # Inserir tot el text d'un cop a l'índex 1
+    # Marges estrets (36 pt = 0.5 polzada) per cabre en una pàgina
     requests.append({
-        "insertText": {
-            "location": {"index": 1},
-            "text": full_text,
+        "updateDocumentStyle": {
+            "documentStyle": {
+                "marginTop":    {"magnitude": 36, "unit": "PT"},
+                "marginBottom": {"magnitude": 36, "unit": "PT"},
+                "marginLeft":   {"magnitude": 36, "unit": "PT"},
+                "marginRight":  {"magnitude": 36, "unit": "PT"},
+            },
+            "fields": "marginTop,marginBottom,marginLeft,marginRight",
         }
     })
 
-    # Calcular índexs i afegir peticions de format
-    idx = 1
-    for text, style in lines:
-        length = len(text)
-        end = idx + length       # índex exclusiu del final (inclou \n)
-        content_end = end - 1    # exclou el \n per a estils de text
+    # Inserir tot el text
+    requests.append({
+        "insertText": {"location": {"index": 1}, "text": full_text}
+    })
 
-        if style == "title":
+    # Interlineat 1.5 per a tot el document
+    requests.append({
+        "updateParagraphStyle": {
+            "range": {"startIndex": 1, "endIndex": 1 + len(full_text)},
+            "paragraphStyle": {"lineSpacing": 115},
+            "fields": "lineSpacing",
+        }
+    })
+
+    # Formatar cada chunk
+    idx = 1
+    for text, bold, italic, heading, _ in chunks:
+        length = len(text)
+        end = idx + length
+        content_end = end - 1  # exclou el \n final
+
+        if heading:
             requests.append({
                 "updateParagraphStyle": {
                     "range": {"startIndex": idx, "endIndex": end},
@@ -196,38 +272,64 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None) -> s
                     "fields": "namedStyleType",
                 }
             })
-        elif style == "italic":
+
+        ts = {}
+        fields_list = []
+        if bold:
+            ts["bold"] = True
+            fields_list.append("bold")
+        if italic:
+            ts["italic"] = True
+            fields_list.append("italic")
+        if ts and content_end > idx:
             requests.append({
                 "updateTextStyle": {
                     "range": {"startIndex": idx, "endIndex": content_end},
-                    "textStyle": {"italic": True},
-                    "fields": "italic",
+                    "textStyle": ts,
+                    "fields": ",".join(fields_list),
                 }
             })
 
         idx = end
 
-    # Inserir imatge QR al paràgraf final (idx - 1 = posició del \n final)
-    qr_path = QR_DIR / f"{card_id}.png"
-    if qr_path.exists():
-        qr_url = f"{QR_BASE_URL}/{card_id}.png"
-        requests.append({
-            "insertInlineImage": {
-                "location": {"index": idx - 1},
-                "uri": qr_url,
-                "objectSize": {
-                    "height": {"magnitude": 150, "unit": "PT"},
-                    "width":  {"magnitude": 150, "unit": "PT"},
-                },
-            }
-        })
-    else:
-        print(f"(avís: no s'ha trobat QR per {card_id})", end=" ")
+    # Crear document i aplicar text + format
+    doc = docs_svc.documents().create(body={"title": card_id}).execute()
+    doc_id = doc["documentId"]
 
-    # Aplicar format i imatge
     docs_svc.documents().batchUpdate(
         documentId=doc_id, body={"requests": requests}
     ).execute()
+
+    # Inserir imatges en crides separades (per poder capturar errors individuals)
+    # Ordre: QR primer (índex major) → foto (índex menor), per no desplaçar índexs
+    def insert_image(idx, url, w, h, label):
+        if idx is None or not url:
+            print(f"(avís: {label} no disponible)", end=" ")
+            return
+        try:
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{
+                    "insertInlineImage": {
+                        "location": {"index": idx},
+                        "uri": url,
+                        "objectSize": {
+                            "height": {"magnitude": h, "unit": "PT"},
+                            "width":  {"magnitude": w, "unit": "PT"},
+                        },
+                    }
+                }]},
+            ).execute()
+        except Exception as e:
+            print(f"(avís: no s'ha pogut inserir {label}: {e})", end=" ")
+
+    # QR (usa URL pública de GitHub Pages, és lleugera)
+    qr_url = f"{QR_BASE_URL}/{card_id}.png" if (QR_DIR / f"{card_id}.png").exists() else None
+    insert_image(qr_idx, qr_url, 90, 90, f"QR {card_id}")
+
+    # Foto (puja a Drive si no hi és al cache)
+    photo_url = get_drive_image_url(drive_svc, None, img_cache, photo_id)
+    insert_image(photo_idx, photo_url, 200, 150, f"foto {photo_id}")
 
     # Moure a la carpeta si s'ha especificat
     if folder_id:
@@ -252,6 +354,16 @@ def main():
         metavar="FOLDER_ID",
         help="ID de la carpeta de Drive on desar els docs (opcional)",
     )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Elimina els docs existents amb el mateix nom abans de crear-ne de nous",
+    )
+    parser.add_argument(
+        "--list-columns",
+        action="store_true",
+        help="Mostra les columnes del full de càlcul i surt",
+    )
     args = parser.parse_args()
 
     print("Connectant als serveis de Google...")
@@ -261,11 +373,25 @@ def main():
     cards = read_cards(sheets_svc)
     print(f"Trobades {len(cards)} fitxes.")
 
+    if args.list_columns:
+        if cards:
+            print("Columnes disponibles:")
+            for col in cards[0].keys():
+                print(f"  · {col!r}")
+        return
+
+    img_cache = load_image_cache()
+
     for card in cards:
         card_id = card.get("cardId", "desconegut").strip()
         print(f"  Creant doc '{card_id}'... ", end="", flush=True)
         try:
-            doc_id = create_card_doc(docs_svc, drive_svc, card, folder_id=args.folder_id)
+            doc_id = create_card_doc(
+                docs_svc, drive_svc, card,
+                folder_id=args.folder_id,
+                img_cache=img_cache,
+                overwrite=args.overwrite,
+            )
             print(f"OK → https://docs.google.com/document/d/{doc_id}")
         except Exception as exc:
             print(f"ERROR: {exc}")
