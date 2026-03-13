@@ -41,11 +41,9 @@ SHEET_NAME = "Cards"
 QR_BASE_URL = "https://cavecavet.github.io/exposicions/images/qrs"
 LOGOS_BASE_URL = "https://cavecavet.github.io/exposicions/images/logos"
 
-# (url, width_pt, height_pt)
-HEADER_LOGOS = [
-    (f"{LOGOS_BASE_URL}/Logo0.png", 80, 50),   # Cave Cavet
-    (f"{LOGOS_BASE_URL}/Insta.png", 40, 40),   # Instagram
-]
+# Capçalera: (url, width_pt, height_pt)
+HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo0.png", 80, 50)
+HEADER_TEXT = " Associació Cave Cavet"
 FOOTER_LOGOS = [
     (f"{LOGOS_BASE_URL}/Logo1.png", 55, 35),   # Ajuntament de Cambrils
     (f"{LOGOS_BASE_URL}/Logo2.png", 70, 35),   # URV
@@ -223,14 +221,55 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
             except Exception as e:
                 print(f"(avís logo {url.split('/')[-1]}: {e})", end=" ")
 
-    # Capçalera
+    # Capçalera: logo + text
     try:
         resp = docs_svc.documents().batchUpdate(
             documentId=doc_id,
             body={"requests": [{"createHeader": {"type": "DEFAULT"}}]},
         ).execute()
         header_id = resp["replies"][0]["createHeader"]["headerId"]
-        _insert_logos(header_id, HEADER_LOGOS)
+        # Centrar paràgraf
+        try:
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{
+                    "updateParagraphStyle": {
+                        "range": {"segmentId": header_id, "startIndex": 0, "endIndex": 1},
+                        "paragraphStyle": {"alignment": "CENTER"},
+                        "fields": "alignment",
+                    }
+                }]},
+            ).execute()
+        except Exception:
+            pass
+        # Inserir logo
+        url, w, h = HEADER_LOGO
+        try:
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{
+                    "insertInlineImage": {
+                        "location": {"segmentId": header_id, "index": 0},
+                        "uri": url,
+                        "objectSize": {
+                            "height": {"magnitude": h, "unit": "PT"},
+                            "width":  {"magnitude": w, "unit": "PT"},
+                        },
+                    }
+                }]},
+            ).execute()
+            # Inserir text just després de la imatge (ara a índex 1)
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{
+                    "insertText": {
+                        "location": {"segmentId": header_id, "index": 1},
+                        "text": HEADER_TEXT,
+                    }
+                }]},
+            ).execute()
+        except Exception as e:
+            print(f"(avís capçalera logo/text: {e})", end=" ")
     except Exception as e:
         print(f"(avís capçalera: {e})", end=" ")
 
