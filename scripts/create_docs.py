@@ -39,6 +39,22 @@ QR_DIR = REPO_DIR / "images" / "qrs"
 SPREADSHEET_ID = "11RKl2Uhu4eAJlKvcAQQajR0bGeAaHMekDOw8CtU5DiI"
 SHEET_NAME = "Cards"
 QR_BASE_URL = "https://cavecavet.github.io/exposicions/images/qrs"
+LOGOS_BASE_URL = "https://cavecavet.github.io/exposicions/images/logos"
+
+# (url, width_pt, height_pt)
+HEADER_LOGOS = [
+    (f"{LOGOS_BASE_URL}/Logo0.png", 80, 50),   # Cave Cavet
+    (f"{LOGOS_BASE_URL}/Insta.png", 40, 40),   # Instagram
+]
+FOOTER_LOGOS = [
+    (f"{LOGOS_BASE_URL}/Logo1.svg", 55, 35),   # Ajuntament de Cambrils
+    (f"{LOGOS_BASE_URL}/Logo2.png", 70, 35),   # URV
+    (f"{LOGOS_BASE_URL}/Logo3.jpg", 50, 35),   # Institut Horticultura
+    (f"{LOGOS_BASE_URL}/Logo4.png", 50, 35),   # MINKA
+    (f"{LOGOS_BASE_URL}/Logo5.png", 50, 35),   # Institut Hoteleria
+    (f"{LOGOS_BASE_URL}/Logo6.png", 50, 35),   # Símbiosy
+    (f"{LOGOS_BASE_URL}/Logo7.png", 60, 35),   # Diputació de Tarragona
+]
 
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets.readonly",
@@ -168,6 +184,66 @@ def delete_existing_docs(drive_svc, name: str, folder_id: str | None) -> int:
         drive_svc.files().delete(fileId=f["id"]).execute()
         deleted += 1
     return deleted
+
+
+def add_header_footer(docs_svc, doc_id: str) -> None:
+    """Afegeix capçalera (Logo0 + Instagram) i peu de pàgina (logos col·laboradors)."""
+
+    def _insert_logos(seg_id: str, logos: list) -> None:
+        # Centrar el paràgraf del segment
+        try:
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{
+                    "updateParagraphStyle": {
+                        "range": {"segmentId": seg_id, "startIndex": 1, "endIndex": 2},
+                        "paragraphStyle": {"alignment": "CENTER"},
+                        "fields": "alignment",
+                    }
+                }]},
+            ).execute()
+        except Exception:
+            pass
+        # Inserir en ordre invers perquè el primer quedi a l'esquerra
+        for url, w, h in reversed(logos):
+            try:
+                docs_svc.documents().batchUpdate(
+                    documentId=doc_id,
+                    body={"requests": [{
+                        "insertInlineImage": {
+                            "location": {"segmentId": seg_id, "index": 1},
+                            "uri": url,
+                            "objectSize": {
+                                "height": {"magnitude": h, "unit": "PT"},
+                                "width":  {"magnitude": w, "unit": "PT"},
+                            },
+                        }
+                    }]},
+                ).execute()
+            except Exception as e:
+                print(f"(avís logo {url.split('/')[-1]}: {e})", end=" ")
+
+    # Capçalera
+    try:
+        resp = docs_svc.documents().batchUpdate(
+            documentId=doc_id,
+            body={"requests": [{"createHeader": {"type": "DEFAULT"}}]},
+        ).execute()
+        header_id = resp["replies"][0]["createHeader"]["headerId"]
+        _insert_logos(header_id, HEADER_LOGOS)
+    except Exception as e:
+        print(f"(avís capçalera: {e})", end=" ")
+
+    # Peu de pàgina
+    try:
+        resp = docs_svc.documents().batchUpdate(
+            documentId=doc_id,
+            body={"requests": [{"createFooter": {"type": "DEFAULT"}}]},
+        ).execute()
+        footer_id = resp["replies"][0]["createFooter"]["footerId"]
+        _insert_logos(footer_id, FOOTER_LOGOS)
+    except Exception as e:
+        print(f"(avís peu: {e})", end=" ")
 
 
 def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_cache: dict, overwrite: bool = False) -> str:
@@ -330,6 +406,9 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
     # Foto (puja a Drive si no hi és al cache)
     photo_url = get_drive_image_url(drive_svc, None, img_cache, photo_id)
     insert_image(photo_idx, photo_url, 200, 150, f"foto {photo_id}")
+
+    # Capçalera i peu de pàgina amb logos
+    add_header_footer(docs_svc, doc_id)
 
     # Moure a la carpeta si s'ha especificat
     if folder_id:
