@@ -42,7 +42,7 @@ QR_BASE_URL = "https://cavecavet.github.io/exposicions/images/qrs"
 LOGOS_BASE_URL = "https://cavecavet.github.io/exposicions/images/logos"
 
 # Capçalera: (url, width_pt, height_pt)
-HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo0.png", 80, 50)
+HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo0.png", 60, 38)  # 25% menor
 HEADER_TEXT = " Associació Cave Cavet"
 FOOTER_LOGOS = [
     (f"{LOGOS_BASE_URL}/Logo1.png", 55, 35),   # Ajuntament de Cambrils
@@ -228,21 +228,7 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
             body={"requests": [{"createHeader": {"type": "DEFAULT"}}]},
         ).execute()
         header_id = resp["replies"][0]["createHeader"]["headerId"]
-        # Centrar paràgraf
-        try:
-            docs_svc.documents().batchUpdate(
-                documentId=doc_id,
-                body={"requests": [{
-                    "updateParagraphStyle": {
-                        "range": {"segmentId": header_id, "startIndex": 0, "endIndex": 1},
-                        "paragraphStyle": {"alignment": "CENTER"},
-                        "fields": "alignment",
-                    }
-                }]},
-            ).execute()
-        except Exception:
-            pass
-        # Inserir logo
+        # Inserir logo i text (alineació esquerra per defecte)
         url, w, h = HEADER_LOGO
         try:
             docs_svc.documents().batchUpdate(
@@ -265,6 +251,21 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
                     "insertText": {
                         "location": {"segmentId": header_id, "index": 1},
                         "text": HEADER_TEXT,
+                    }
+                }]},
+            ).execute()
+            # Text negreta i 14pt (20% més gran que 11.5pt base)
+            text_end = 1 + len(HEADER_TEXT)
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{
+                    "updateTextStyle": {
+                        "range": {"segmentId": header_id, "startIndex": 1, "endIndex": text_end},
+                        "textStyle": {
+                            "bold": True,
+                            "fontSize": {"magnitude": 14, "unit": "PT"},
+                        },
+                        "fields": "bold,fontSize",
                     }
                 }]},
             ).execute()
@@ -345,16 +346,20 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
     # ── API requests ──────────────────────────────────────────────────────
     requests = []
 
-    # Marges estrets (36 pt = 0.5 polzada) per cabre en una pàgina
+    # Mida A5 i marges estrets (36 pt = 0.5 polzada)
     requests.append({
         "updateDocumentStyle": {
             "documentStyle": {
+                "pageSize": {
+                    "width":  {"magnitude": 419, "unit": "PT"},
+                    "height": {"magnitude": 595, "unit": "PT"},
+                },
                 "marginTop":    {"magnitude": 36, "unit": "PT"},
                 "marginBottom": {"magnitude": 36, "unit": "PT"},
                 "marginLeft":   {"magnitude": 36, "unit": "PT"},
                 "marginRight":  {"magnitude": 36, "unit": "PT"},
             },
-            "fields": "marginTop,marginBottom,marginLeft,marginRight",
+            "fields": "pageSize,marginTop,marginBottom,marginLeft,marginRight",
         }
     })
 
