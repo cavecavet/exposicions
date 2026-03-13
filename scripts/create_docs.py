@@ -47,7 +47,7 @@ HEADER_LOGOS = [
     (f"{LOGOS_BASE_URL}/Insta.png", 40, 40),   # Instagram
 ]
 FOOTER_LOGOS = [
-    (f"{LOGOS_BASE_URL}/Logo1.svg", 55, 35),   # Ajuntament de Cambrils
+    (f"{LOGOS_BASE_URL}/Logo1.png", 55, 35),   # Ajuntament de Cambrils
     (f"{LOGOS_BASE_URL}/Logo2.png", 70, 35),   # URV
     (f"{LOGOS_BASE_URL}/Logo3.jpg", 50, 35),   # Institut Horticultura
     (f"{LOGOS_BASE_URL}/Logo4.png", 50, 35),   # MINKA
@@ -190,13 +190,13 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
     """Afegeix capçalera (Logo0 + Instagram) i peu de pàgina (logos col·laboradors)."""
 
     def _insert_logos(seg_id: str, logos: list) -> None:
-        # Centrar el paràgraf del segment
+        # Centrar el paràgraf del segment (índex 0 en header/footer)
         try:
             docs_svc.documents().batchUpdate(
                 documentId=doc_id,
                 body={"requests": [{
                     "updateParagraphStyle": {
-                        "range": {"segmentId": seg_id, "startIndex": 1, "endIndex": 2},
+                        "range": {"segmentId": seg_id, "startIndex": 0, "endIndex": 1},
                         "paragraphStyle": {"alignment": "CENTER"},
                         "fields": "alignment",
                     }
@@ -211,7 +211,7 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
                     documentId=doc_id,
                     body={"requests": [{
                         "insertInlineImage": {
-                            "location": {"segmentId": seg_id, "index": 1},
+                            "location": {"segmentId": seg_id, "index": 0},
                             "uri": url,
                             "objectSize": {
                                 "height": {"magnitude": h, "unit": "PT"},
