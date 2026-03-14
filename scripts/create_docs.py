@@ -42,19 +42,21 @@ QR_BASE_URL = "https://cavecavet.github.io/exposicions/images/qrs"
 LOGOS_BASE_URL = "https://cavecavet.github.io/exposicions/images/logos"
 
 # Capçalera: (url, width_pt, height_pt)
-HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo0.png", 60, 38)  # 25% menor
-HEADER_TEXT = " Associació Cave Cavet"
-# Peu de pàgina: 2 línies
+HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo0.png", 19, 19)  # logo quadrat compacte
+HEADER_TEXT = "Associació Cave Cavet"
+HEADER_SPACE_PT = 9   # espai inicial (abans del logo)
+HEADER_TEXT_PT  = 10  # text del nom
+# Peu de pàgina: 2 línies (compacte)
 FOOTER_LINE1 = [
-    (f"{LOGOS_BASE_URL}/Logo1.png", 48, 27),   # Ajuntament de Cambrils
-    (f"{LOGOS_BASE_URL}/Logo2.png", 45, 22),   # URV (-20% addicional)
-    (f"{LOGOS_BASE_URL}/Logo3.jpg", 44, 27),   # Institut Horticultura
-    (f"{LOGOS_BASE_URL}/Logo4.png", 32, 22),   # MINKA (-20% addicional)
+    (f"{LOGOS_BASE_URL}/Logo1.png", 41, 20),   # Ajuntament de Cambrils (+10%)
+    (f"{LOGOS_BASE_URL}/Logo2.png", 39, 17),   # URV (+10%)
+    (f"{LOGOS_BASE_URL}/Logo3.jpg", 36, 20),   # Institut Horticultura (+10%)
+    (f"{LOGOS_BASE_URL}/Logo4.png", 26, 17),   # MINKA (+10%)
 ]
 FOOTER_LINE2 = [
-    (f"{LOGOS_BASE_URL}/Logo5.png", 44, 27),   # Institut Hoteleria
-    (f"{LOGOS_BASE_URL}/Logo6.png", 44, 27),   # Símbiosy
-    (f"{LOGOS_BASE_URL}/Logo7.png", 52, 27),   # Diputació de Tarragona
+    (f"{LOGOS_BASE_URL}/Logo5.png", 36, 20),   # Institut Hoteleria (+10%)
+    (f"{LOGOS_BASE_URL}/Logo6.png", 36, 20),   # Símbiosy (+10%)
+    (f"{LOGOS_BASE_URL}/Logo7.png", 44, 20),   # Diputació de Tarragona (+10%)
 ]
 
 SCOPES = [
@@ -217,14 +219,23 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
             body={"requests": [{"createHeader": {"type": "DEFAULT"}}]},
         ).execute()
         header_id = resp["replies"][0]["createHeader"]["headerId"]
-        # Inserir logo i text (alineació esquerra per defecte)
+        # Estructura: [espai][logo][text]  → alineat START
         url, w, h = HEADER_LOGO
         try:
+            # 1. Espai inicial (index 0)
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{"insertText": {
+                    "location": {"segmentId": header_id, "index": 0},
+                    "text": " ",
+                }}]},
+            ).execute()
+            # 2. Logo (index 1, just after space)
             docs_svc.documents().batchUpdate(
                 documentId=doc_id,
                 body={"requests": [{
                     "insertInlineImage": {
-                        "location": {"segmentId": header_id, "index": 0},
+                        "location": {"segmentId": header_id, "index": 1},
                         "uri": url,
                         "objectSize": {
                             "height": {"magnitude": h, "unit": "PT"},
@@ -233,30 +244,45 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
                     }
                 }]},
             ).execute()
-            # Inserir text just després de la imatge (ara a índex 1)
+            # 3. Text nom associació (index 2, just after logo)
             docs_svc.documents().batchUpdate(
                 documentId=doc_id,
-                body={"requests": [{
-                    "insertText": {
-                        "location": {"segmentId": header_id, "index": 1},
-                        "text": HEADER_TEXT,
-                    }
-                }]},
+                body={"requests": [{"insertText": {
+                    "location": {"segmentId": header_id, "index": 2},
+                    "text": HEADER_TEXT,
+                }}]},
             ).execute()
-            # Text negreta i 14pt (20% més gran que 11.5pt base)
-            text_end = 1 + len(HEADER_TEXT)
+            text_end = 2 + len(HEADER_TEXT)
+            # Estil espai inicial: 9pt bold
             docs_svc.documents().batchUpdate(
                 documentId=doc_id,
-                body={"requests": [{
-                    "updateTextStyle": {
-                        "range": {"segmentId": header_id, "startIndex": 1, "endIndex": text_end},
-                        "textStyle": {
-                            "bold": True,
-                            "fontSize": {"magnitude": 14, "unit": "PT"},
-                        },
-                        "fields": "bold,fontSize",
-                    }
-                }]},
+                body={"requests": [{"updateTextStyle": {
+                    "range": {"segmentId": header_id, "startIndex": 0, "endIndex": 1},
+                    "textStyle": {"bold": True, "fontSize": {"magnitude": HEADER_SPACE_PT, "unit": "PT"}},
+                    "fields": "bold,fontSize",
+                }}]},
+            ).execute()
+            # Estil text nom: 10pt bold
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{"updateTextStyle": {
+                    "range": {"segmentId": header_id, "startIndex": 2, "endIndex": text_end},
+                    "textStyle": {"bold": True, "fontSize": {"magnitude": HEADER_TEXT_PT, "unit": "PT"}},
+                    "fields": "bold,fontSize",
+                }}]},
+            ).execute()
+            # Paràgraf: START, interlineat compacte
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{"updateParagraphStyle": {
+                    "range": {"segmentId": header_id, "startIndex": 0, "endIndex": text_end + 1},
+                    "paragraphStyle": {
+                        "lineSpacing": 100,
+                        "spaceAbove": {"magnitude": 0, "unit": "PT"},
+                        "spaceBelow": {"magnitude": 0, "unit": "PT"},
+                    },
+                    "fields": "lineSpacing,spaceAbove,spaceBelow",
+                }}]},
             ).execute()
         except Exception as e:
             print(f"(avís capçalera logo/text: {e})", end=" ")
@@ -361,10 +387,12 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
     # ── Compute positions ─────────────────────────────────────────────────
     full_text = "".join(c[0] for c in chunks)
     images_idx = None
+    fields_start_idx = None
     pos = 1
     for text, _, _, _, marker in chunks:
         if marker == "images":
             images_idx = pos
+            fields_start_idx = pos + len(text)  # camps comencen just després
         pos += len(text)
 
     # ── API requests ──────────────────────────────────────────────────────
@@ -392,18 +420,27 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
         "insertText": {"location": {"index": 1}, "text": full_text}
     })
 
-    # Interlineat simple per a tot el document
+    # Interlineat 115 per a tot el cos (heading + imatges)
     requests.append({
         "updateParagraphStyle": {
             "range": {"startIndex": 1, "endIndex": 1 + len(full_text)},
             "paragraphStyle": {
-                "lineSpacing": 100,
+                "lineSpacing": 115,
                 "spaceAbove": {"magnitude": 0, "unit": "PT"},
                 "spaceBelow": {"magnitude": 0, "unit": "PT"},
             },
             "fields": "lineSpacing,spaceAbove,spaceBelow",
         }
     })
+    # Interlineat 150 per als camps (a partir del primer camp)
+    if fields_start_idx and fields_start_idx < 1 + len(full_text):
+        requests.append({
+            "updateParagraphStyle": {
+                "range": {"startIndex": fields_start_idx, "endIndex": 1 + len(full_text)},
+                "paragraphStyle": {"lineSpacing": 150},
+                "fields": "lineSpacing",
+            }
+        })
 
     # Formatar cada chunk
     idx = 1
@@ -440,21 +477,34 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
 
         idx = end
 
-    # Títol artístic: centrat i 10% més gran (22pt)
+    # Títol artístic: centrat, 22pt, amb 12pt d'espai superior
     if artistic_name:
         heading_len = len(artistic_name) + 1  # +1 per al \n
         requests.append({
             "updateParagraphStyle": {
                 "range": {"startIndex": 1, "endIndex": 1 + heading_len},
-                "paragraphStyle": {"alignment": "CENTER"},
-                "fields": "alignment",
+                "paragraphStyle": {
+                    "alignment": "CENTER",
+                    "spaceAbove": {"magnitude": 12, "unit": "PT"},
+                },
+                "fields": "alignment,spaceAbove",
             }
         })
         requests.append({
             "updateTextStyle": {
                 "range": {"startIndex": 1, "endIndex": heading_len},  # exclou \n
-                "textStyle": {"fontSize": {"magnitude": 22, "unit": "PT"}},
+                "textStyle": {"fontSize": {"magnitude": 20, "unit": "PT"}},
                 "fields": "fontSize",
+            }
+        })
+
+    # 12pt d'espai sobre el primer camp
+    if fields_start_idx and fields_start_idx < 1 + len(full_text):
+        requests.append({
+            "updateParagraphStyle": {
+                "range": {"startIndex": fields_start_idx, "endIndex": fields_start_idx + 1},
+                "paragraphStyle": {"spaceAbove": {"magnitude": 12, "unit": "PT"}},
+                "fields": "spaceAbove",
             }
         })
 
@@ -489,13 +539,12 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
         except Exception as e:
             print(f"(avís: no s'ha pogut inserir {label}: {e})", end=" ")
 
-    # Foto i QR costat a costat, mateixa mida (QR actual 80pt +15% = 92pt)
-    IMG_SIZE = 92
+    # Foto (92pt ample, altura auto per ratio) i QR (63×63) costat a costat
     qr_url = f"{QR_BASE_URL}/{card_id}.png" if (QR_DIR / f"{card_id}.png").exists() else None
-    insert_image(images_idx, qr_url, IMG_SIZE, IMG_SIZE, f"QR {card_id}")
+    insert_image(images_idx, qr_url, 63, 63, f"QR {card_id}")
 
     photo_url = get_drive_image_url(drive_svc, None, img_cache, photo_id)
-    insert_image(images_idx, photo_url, IMG_SIZE, IMG_SIZE, f"foto {photo_id}")
+    insert_image(images_idx, photo_url, 92, 92, f"foto {photo_id}")
 
     # Capçalera i peu de pàgina amb logos
     add_header_footer(docs_svc, doc_id)
@@ -533,6 +582,13 @@ def main():
         action="store_true",
         help="Mostra les columnes del full de càlcul i surt",
     )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=0,
+        metavar="N",
+        help="Processa només els N primers cards (0 = tots)",
+    )
     args = parser.parse_args()
 
     print("Connectant als serveis de Google...")
@@ -550,6 +606,9 @@ def main():
         return
 
     img_cache = load_image_cache()
+
+    if args.limit:
+        cards = cards[:args.limit]
 
     for card in cards:
         card_id = card.get("cardId", "desconegut").strip()
