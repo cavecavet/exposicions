@@ -44,11 +44,14 @@ LOGOS_BASE_URL = "https://cavecavet.github.io/exposicions/images/logos"
 # Capçalera: (url, width_pt, height_pt)
 HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo0.png", 60, 38)  # 25% menor
 HEADER_TEXT = " Associació Cave Cavet"
-FOOTER_LOGOS = [
+# Peu de pàgina: 2 línies
+FOOTER_LINE1 = [
     (f"{LOGOS_BASE_URL}/Logo1.png", 55, 35),   # Ajuntament de Cambrils
-    (f"{LOGOS_BASE_URL}/Logo2.png", 70, 35),   # URV
+    (f"{LOGOS_BASE_URL}/Logo2.png", 56, 28),   # URV (20% menor)
     (f"{LOGOS_BASE_URL}/Logo3.jpg", 50, 35),   # Institut Horticultura
-    (f"{LOGOS_BASE_URL}/Logo4.png", 50, 35),   # MINKA
+    (f"{LOGOS_BASE_URL}/Logo4.png", 40, 28),   # MINKA (20% menor)
+]
+FOOTER_LINE2 = [
     (f"{LOGOS_BASE_URL}/Logo5.png", 50, 35),   # Institut Hoteleria
     (f"{LOGOS_BASE_URL}/Logo6.png", 50, 35),   # Símbiosy
     (f"{LOGOS_BASE_URL}/Logo7.png", 60, 35),   # Diputació de Tarragona
@@ -187,29 +190,15 @@ def delete_existing_docs(drive_svc, name: str, folder_id: str | None) -> int:
 def add_header_footer(docs_svc, doc_id: str) -> None:
     """Afegeix capçalera (Logo0 + Instagram) i peu de pàgina (logos col·laboradors)."""
 
-    def _insert_logos(seg_id: str, logos: list) -> None:
-        # Centrar el paràgraf del segment (índex 0 en header/footer)
-        try:
-            docs_svc.documents().batchUpdate(
-                documentId=doc_id,
-                body={"requests": [{
-                    "updateParagraphStyle": {
-                        "range": {"segmentId": seg_id, "startIndex": 0, "endIndex": 1},
-                        "paragraphStyle": {"alignment": "CENTER"},
-                        "fields": "alignment",
-                    }
-                }]},
-            ).execute()
-        except Exception:
-            pass
-        # Inserir en ordre invers perquè el primer quedi a l'esquerra
+    def _insert_line(seg_id: str, logos: list, index: int) -> None:
+        """Insereix logos en ordre a partir d'index, en ordre invers per preservar l'ordre."""
         for url, w, h in reversed(logos):
             try:
                 docs_svc.documents().batchUpdate(
                     documentId=doc_id,
                     body={"requests": [{
                         "insertInlineImage": {
-                            "location": {"segmentId": seg_id, "index": 0},
+                            "location": {"segmentId": seg_id, "index": index},
                             "uri": url,
                             "objectSize": {
                                 "height": {"magnitude": h, "unit": "PT"},
@@ -274,14 +263,63 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
     except Exception as e:
         print(f"(avís capçalera: {e})", end=" ")
 
-    # Peu de pàgina
+    # Peu de pàgina: dues línies
     try:
         resp = docs_svc.documents().batchUpdate(
             documentId=doc_id,
             body={"requests": [{"createFooter": {"type": "DEFAULT"}}]},
         ).execute()
         footer_id = resp["replies"][0]["createFooter"]["footerId"]
-        _insert_logos(footer_id, FOOTER_LOGOS)
+
+        # Línia 1: 4 primers logos, centrats
+        _insert_line(footer_id, FOOTER_LINE1, 0)
+        n1 = len(FOOTER_LINE1)
+        try:
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{
+                    "updateParagraphStyle": {
+                        "range": {"segmentId": footer_id, "startIndex": 0, "endIndex": 1},
+                        "paragraphStyle": {"alignment": "CENTER"},
+                        "fields": "alignment",
+                    }
+                }]},
+            ).execute()
+        except Exception:
+            pass
+
+        # Salt de línia entre les dues files
+        try:
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{"insertText": {
+                    "location": {"segmentId": footer_id, "index": n1},
+                    "text": "\n",
+                }}]},
+            ).execute()
+        except Exception as e:
+            print(f"(avís salt línia footer: {e})", end=" ")
+
+        # Línia 2: 3 últims logos, centrats, a partir de n1+1
+        line2_start = n1 + 1
+        _insert_line(footer_id, FOOTER_LINE2, line2_start)
+        try:
+            docs_svc.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{
+                    "updateParagraphStyle": {
+                        "range": {
+                            "segmentId": footer_id,
+                            "startIndex": line2_start,
+                            "endIndex": line2_start + 1,
+                        },
+                        "paragraphStyle": {"alignment": "CENTER"},
+                        "fields": "alignment",
+                    }
+                }]},
+            ).execute()
+        except Exception as e:
+            print(f"(avís centrat línia 2: {e})", end=" ")
     except Exception as e:
         print(f"(avís peu: {e})", end=" ")
 
