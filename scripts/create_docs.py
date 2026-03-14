@@ -342,7 +342,7 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
     location        = get_field(card, "location")
 
     # ── Chunks: (text, bold, italic, heading, marker) ────────────────────
-    # marker: 'photo' | 'qr' | None
+    # marker: 'images' | None
     chunks: list[tuple[str, bool, bool, bool, str | None]] = []
 
     def add(text, bold=False, italic=False, heading=False, marker=None):
@@ -355,7 +355,7 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
 
     if artistic_name:
         add(artistic_name + "\n", heading=True)
-    add("\n", marker="photo")   # paràgraf buit → foto s'insereix aquí
+    add("\n", marker="images")  # paràgraf buit → foto+QR costat a costat
     add("\n")                   # línia en blanc
 
     field("Nom comú", common_name)
@@ -367,24 +367,19 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
     if location:   field("Lloc", location)
     field("Autor fitxa", card_author)
 
-    add("\n")               # línia en blanc
-    add("\n", marker="qr")  # paràgraf buit → QR s'insereix aquí
-
     # ── Compute positions ─────────────────────────────────────────────────
     full_text = "".join(c[0] for c in chunks)
-    photo_idx = qr_idx = None
+    images_idx = None
     pos = 1
     for text, _, _, _, marker in chunks:
-        if marker == "photo":
-            photo_idx = pos
-        elif marker == "qr":
-            qr_idx = pos
+        if marker == "images":
+            images_idx = pos
         pos += len(text)
 
     # ── API requests ──────────────────────────────────────────────────────
     requests = []
 
-    # Mida A5 i marges estrets (36 pt = 0.5 polzada)
+    # Mida A5 i marges reduïts (28 pt ≈ 10 mm) per cabre en una pàgina
     requests.append({
         "updateDocumentStyle": {
             "documentStyle": {
@@ -392,10 +387,10 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
                     "width":  {"magnitude": 419, "unit": "PT"},
                     "height": {"magnitude": 595, "unit": "PT"},
                 },
-                "marginTop":    {"magnitude": 36, "unit": "PT"},
-                "marginBottom": {"magnitude": 36, "unit": "PT"},
-                "marginLeft":   {"magnitude": 36, "unit": "PT"},
-                "marginRight":  {"magnitude": 36, "unit": "PT"},
+                "marginTop":    {"magnitude": 28, "unit": "PT"},
+                "marginBottom": {"magnitude": 28, "unit": "PT"},
+                "marginLeft":   {"magnitude": 28, "unit": "PT"},
+                "marginRight":  {"magnitude": 28, "unit": "PT"},
             },
             "fields": "pageSize,marginTop,marginBottom,marginLeft,marginRight",
         }
@@ -450,6 +445,24 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
 
         idx = end
 
+    # Títol artístic: centrat i 10% més gran (22pt)
+    if artistic_name:
+        heading_len = len(artistic_name) + 1  # +1 per al \n
+        requests.append({
+            "updateParagraphStyle": {
+                "range": {"startIndex": 1, "endIndex": 1 + heading_len},
+                "paragraphStyle": {"alignment": "CENTER"},
+                "fields": "alignment",
+            }
+        })
+        requests.append({
+            "updateTextStyle": {
+                "range": {"startIndex": 1, "endIndex": heading_len},  # exclou \n
+                "textStyle": {"fontSize": {"magnitude": 22, "unit": "PT"}},
+                "fields": "fontSize",
+            }
+        })
+
     # Crear document i aplicar text + format
     doc = docs_svc.documents().create(body={"title": card_id}).execute()
     doc_id = doc["documentId"]
@@ -481,13 +494,13 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
         except Exception as e:
             print(f"(avís: no s'ha pogut inserir {label}: {e})", end=" ")
 
-    # QR (usa URL pública de GitHub Pages, és lleugera)
+    # Foto i QR costat a costat: inserir QR primer (quedarà a la dreta),
+    # després foto al mateix índex (quedarà a l'esquerra)
     qr_url = f"{QR_BASE_URL}/{card_id}.png" if (QR_DIR / f"{card_id}.png").exists() else None
-    insert_image(qr_idx, qr_url, 90, 90, f"QR {card_id}")
+    insert_image(images_idx, qr_url, 80, 80, f"QR {card_id}")
 
-    # Foto (puja a Drive si no hi és al cache)
     photo_url = get_drive_image_url(drive_svc, None, img_cache, photo_id)
-    insert_image(photo_idx, photo_url, 200, 150, f"foto {photo_id}")
+    insert_image(images_idx, photo_url, 190, 140, f"foto {photo_id}")
 
     # Capçalera i peu de pàgina amb logos
     add_header_footer(docs_svc, doc_id)
