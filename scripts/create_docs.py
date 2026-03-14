@@ -46,15 +46,15 @@ HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo0.png", 60, 38)  # 25% menor
 HEADER_TEXT = " Associació Cave Cavet"
 # Peu de pàgina: 2 línies
 FOOTER_LINE1 = [
-    (f"{LOGOS_BASE_URL}/Logo1.png", 55, 35),   # Ajuntament de Cambrils
-    (f"{LOGOS_BASE_URL}/Logo2.png", 56, 28),   # URV (20% menor)
-    (f"{LOGOS_BASE_URL}/Logo3.jpg", 50, 35),   # Institut Horticultura
-    (f"{LOGOS_BASE_URL}/Logo4.png", 40, 28),   # MINKA (20% menor)
+    (f"{LOGOS_BASE_URL}/Logo1.png", 48, 27),   # Ajuntament de Cambrils
+    (f"{LOGOS_BASE_URL}/Logo2.png", 45, 22),   # URV (-20% addicional)
+    (f"{LOGOS_BASE_URL}/Logo3.jpg", 44, 27),   # Institut Horticultura
+    (f"{LOGOS_BASE_URL}/Logo4.png", 32, 22),   # MINKA (-20% addicional)
 ]
 FOOTER_LINE2 = [
-    (f"{LOGOS_BASE_URL}/Logo5.png", 50, 35),   # Institut Hoteleria
-    (f"{LOGOS_BASE_URL}/Logo6.png", 50, 35),   # Símbiosy
-    (f"{LOGOS_BASE_URL}/Logo7.png", 60, 35),   # Diputació de Tarragona
+    (f"{LOGOS_BASE_URL}/Logo5.png", 44, 27),   # Institut Hoteleria
+    (f"{LOGOS_BASE_URL}/Logo6.png", 44, 27),   # Símbiosy
+    (f"{LOGOS_BASE_URL}/Logo7.png", 52, 27),   # Diputació de Tarragona
 ]
 
 SCOPES = [
@@ -274,19 +274,6 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
         # Línia 1: 4 primers logos, centrats
         _insert_line(footer_id, FOOTER_LINE1, 0)
         n1 = len(FOOTER_LINE1)
-        try:
-            docs_svc.documents().batchUpdate(
-                documentId=doc_id,
-                body={"requests": [{
-                    "updateParagraphStyle": {
-                        "range": {"segmentId": footer_id, "startIndex": 0, "endIndex": 1},
-                        "paragraphStyle": {"alignment": "CENTER"},
-                        "fields": "alignment",
-                    }
-                }]},
-            ).execute()
-        except Exception:
-            pass
 
         # Salt de línia entre les dues files
         try:
@@ -303,23 +290,28 @@ def add_header_footer(docs_svc, doc_id: str) -> None:
         # Línia 2: 3 últims logos, centrats, a partir de n1+1
         line2_start = n1 + 1
         _insert_line(footer_id, FOOTER_LINE2, line2_start)
-        try:
-            docs_svc.documents().batchUpdate(
-                documentId=doc_id,
-                body={"requests": [{
-                    "updateParagraphStyle": {
-                        "range": {
-                            "segmentId": footer_id,
-                            "startIndex": line2_start,
-                            "endIndex": line2_start + 1,
-                        },
-                        "paragraphStyle": {"alignment": "CENTER"},
-                        "fields": "alignment",
-                    }
-                }]},
-            ).execute()
-        except Exception as e:
-            print(f"(avís centrat línia 2: {e})", end=" ")
+
+        # Estil de les dues línies del peu: centrat, interlineat simple, sense espais
+        compact_style = {
+            "alignment": "CENTER",
+            "lineSpacing": 100,
+            "spaceAbove": {"magnitude": 0, "unit": "PT"},
+            "spaceBelow": {"magnitude": 0, "unit": "PT"},
+        }
+        for (s, e) in [(0, n1 + 1), (line2_start, line2_start + 1)]:
+            try:
+                docs_svc.documents().batchUpdate(
+                    documentId=doc_id,
+                    body={"requests": [{
+                        "updateParagraphStyle": {
+                            "range": {"segmentId": footer_id, "startIndex": s, "endIndex": e},
+                            "paragraphStyle": compact_style,
+                            "fields": "alignment,lineSpacing,spaceAbove,spaceBelow",
+                        }
+                    }]},
+                ).execute()
+            except Exception as e2:
+                print(f"(avís estil peu: {e2})", end=" ")
     except Exception as e:
         print(f"(avís peu: {e})", end=" ")
 
@@ -356,7 +348,6 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
     if artistic_name:
         add(artistic_name + "\n", heading=True)
     add("\n", marker="images")  # paràgraf buit → foto+QR costat a costat
-    add("\n")                   # línia en blanc
 
     field("Nom comú", common_name)
     field("Nom científic", scientific_name, italic_val=True)
@@ -379,18 +370,18 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
     # ── API requests ──────────────────────────────────────────────────────
     requests = []
 
-    # Mida A5 i marges reduïts (28 pt ≈ 10 mm) per cabre en una pàgina
+    # Mida 15×10 cm (alt×ample) i marges reduïts per cabre en una pàgina
     requests.append({
         "updateDocumentStyle": {
             "documentStyle": {
                 "pageSize": {
-                    "width":  {"magnitude": 419, "unit": "PT"},
-                    "height": {"magnitude": 595, "unit": "PT"},
+                    "width":  {"magnitude": 284, "unit": "PT"},  # 10 cm
+                    "height": {"magnitude": 425, "unit": "PT"},  # 15 cm
                 },
-                "marginTop":    {"magnitude": 28, "unit": "PT"},
-                "marginBottom": {"magnitude": 28, "unit": "PT"},
-                "marginLeft":   {"magnitude": 28, "unit": "PT"},
-                "marginRight":  {"magnitude": 28, "unit": "PT"},
+                "marginTop":    {"magnitude": 18, "unit": "PT"},
+                "marginBottom": {"magnitude": 18, "unit": "PT"},
+                "marginLeft":   {"magnitude": 18, "unit": "PT"},
+                "marginRight":  {"magnitude": 18, "unit": "PT"},
             },
             "fields": "pageSize,marginTop,marginBottom,marginLeft,marginRight",
         }
@@ -401,12 +392,16 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
         "insertText": {"location": {"index": 1}, "text": full_text}
     })
 
-    # Interlineat 1.5 per a tot el document
+    # Interlineat simple per a tot el document
     requests.append({
         "updateParagraphStyle": {
             "range": {"startIndex": 1, "endIndex": 1 + len(full_text)},
-            "paragraphStyle": {"lineSpacing": 115},
-            "fields": "lineSpacing",
+            "paragraphStyle": {
+                "lineSpacing": 100,
+                "spaceAbove": {"magnitude": 0, "unit": "PT"},
+                "spaceBelow": {"magnitude": 0, "unit": "PT"},
+            },
+            "fields": "lineSpacing,spaceAbove,spaceBelow",
         }
     })
 
@@ -494,13 +489,13 @@ def create_card_doc(docs_svc, drive_svc, card: dict, folder_id: str | None, img_
         except Exception as e:
             print(f"(avís: no s'ha pogut inserir {label}: {e})", end=" ")
 
-    # Foto i QR costat a costat: inserir QR primer (quedarà a la dreta),
-    # després foto al mateix índex (quedarà a l'esquerra)
+    # Foto i QR costat a costat, mateixa mida (QR actual 80pt +15% = 92pt)
+    IMG_SIZE = 92
     qr_url = f"{QR_BASE_URL}/{card_id}.png" if (QR_DIR / f"{card_id}.png").exists() else None
-    insert_image(images_idx, qr_url, 80, 80, f"QR {card_id}")
+    insert_image(images_idx, qr_url, IMG_SIZE, IMG_SIZE, f"QR {card_id}")
 
     photo_url = get_drive_image_url(drive_svc, None, img_cache, photo_id)
-    insert_image(images_idx, photo_url, 190, 140, f"foto {photo_id}")
+    insert_image(images_idx, photo_url, IMG_SIZE, IMG_SIZE, f"foto {photo_id}")
 
     # Capçalera i peu de pàgina amb logos
     add_header_footer(docs_svc, doc_id)
