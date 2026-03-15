@@ -589,6 +589,12 @@ def main():
         metavar="N",
         help="Processa només els N primers cards (0 = tots)",
     )
+    parser.add_argument(
+        "--cards",
+        nargs="+",
+        metavar="CARD_ID",
+        help="Processa només els cards amb aquests IDs",
+    )
     args = parser.parse_args()
 
     print("Connectant als serveis de Google...")
@@ -607,7 +613,9 @@ def main():
 
     img_cache = load_image_cache()
 
-    if args.limit:
+    if args.cards:
+        cards = [c for c in cards if c.get("cardId", "").strip() in args.cards]
+    elif args.limit:
         cards = cards[:args.limit]
 
     for card in cards:
