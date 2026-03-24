@@ -90,8 +90,8 @@ def upload_pdf(drive, name: str, data: bytes, folder_id: str) -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="Exporta docs de Drive a PDF.")
-    parser.add_argument("--source-folder", default="tarjetes", help="Nom carpeta origen a Drive")
-    parser.add_argument("--dest-folder",   default="targetes.pdf", help="Nom carpeta destí a Drive")
+    parser.add_argument("--source-folder", default="Targetes", help="Nom carpeta origen a Drive")
+    parser.add_argument("--dest-folder",   default="Targetes.pdf", help="Nom carpeta destí a Drive")
     args = parser.parse_args()
 
     drive = get_drive()
