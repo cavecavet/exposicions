@@ -42,7 +42,7 @@ QR_BASE_URL = "https://cavecavet.github.io/exposicions/images/qrs"
 LOGOS_BASE_URL = "https://cavecavet.github.io/exposicions/images/logos"
 
 # Capçalera: (url, width_pt, height_pt)
-HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo0.png", 19, 19)  # logo quadrat compacte
+HEADER_LOGO = (f"{LOGOS_BASE_URL}/Logo00.png", 19, 19)  # logo quadrat compacte
 HEADER_TEXT = "Associació Cave Cavet"
 HEADER_SPACE_PT = 9   # espai inicial (abans del logo)
 HEADER_TEXT_PT  = 10  # text del nom
@@ -54,6 +54,7 @@ FOOTER_LINE1 = [
     (f"{LOGOS_BASE_URL}/Logo4.png", 26, 17),   # MINKA (+10%)
 ]
 FOOTER_LINE2 = [
+    (f"{LOGOS_BASE_URL}/Logo0.png", 90, 17),   # Comaigua
     (f"{LOGOS_BASE_URL}/Logo5.png", 36, 20),   # Institut Hoteleria (+10%)
     (f"{LOGOS_BASE_URL}/Logo6.png", 36, 20),   # Símbiosy (+10%)
     (f"{LOGOS_BASE_URL}/Logo7.png", 44, 20),   # Diputació de Tarragona (+10%)
@@ -190,7 +191,7 @@ def delete_existing_docs(drive_svc, name: str, folder_id: str | None) -> int:
 
 
 def add_header_footer(docs_svc, doc_id: str) -> None:
-    """Afegeix capçalera (Logo0 + Instagram) i peu de pàgina (logos col·laboradors)."""
+    """Afegeix capçalera (Logo00 + Instagram) i peu de pàgina (logos col·laboradors)."""
 
     def _insert_line(seg_id: str, logos: list, index: int) -> None:
         """Insereix logos en ordre a partir d'index, en ordre invers per preservar l'ordre."""
