@@ -118,6 +118,10 @@ body {
   height: 27px;
 }
 
+.site-footer-logos img.logo-lg {
+  height: 53px;
+}
+
 .site-footer p {
   color: #666;
   font-size: 13px;
@@ -434,6 +438,10 @@ body {
 
   .site-footer-logos img.logo-sm {
     height: 12px;
+  }
+
+  .site-footer-logos img.logo-lg {
+    height: 24px;
   }
 
   .site-footer p {
