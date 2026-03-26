@@ -114,6 +114,10 @@ body {
   height: 60px;
 }
 
+.site-footer-logos img.logo-sm {
+  height: 27px;
+}
+
 .site-footer p {
   color: #666;
   font-size: 13px;
@@ -426,6 +430,10 @@ body {
 
   .site-footer-logos img.logo-urv {
     height: 27px;
+  }
+
+  .site-footer-logos img.logo-sm {
+    height: 12px;
   }
 
   .site-footer p {
