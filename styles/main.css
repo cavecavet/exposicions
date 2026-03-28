@@ -82,7 +82,7 @@ body {
 /* Site Footer */
 .site-footer {
   background: white;
-  padding: 20px 24px;
+  padding: 17px 24px;
   text-align: center;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -420,7 +420,7 @@ body {
   }
 
   .site-footer {
-    padding: 6px 12px;
+    padding: 5px 12px;
   }
 
   .site-footer-logos {
