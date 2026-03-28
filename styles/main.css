@@ -106,20 +106,20 @@ body {
 }
 
 .site-footer-logos img {
-  height: 40px;
+  height: 34px;
   width: auto;
 }
 
 .site-footer-logos img.logo-urv {
-  height: 60px;
+  height: 51px;
 }
 
 .site-footer-logos img.logo-sm {
-  height: 27px;
+  height: 23px;
 }
 
 .site-footer-logos img.logo-lg {
-  height: 53px;
+  height: 45px;
 }
 
 .site-footer p {
@@ -429,19 +429,19 @@ body {
   }
 
   .site-footer-logos img {
-    height: 18px;
+    height: 15px;
   }
 
   .site-footer-logos img.logo-urv {
-    height: 27px;
+    height: 23px;
   }
 
   .site-footer-logos img.logo-sm {
-    height: 12px;
+    height: 10px;
   }
 
   .site-footer-logos img.logo-lg {
-    height: 24px;
+    height: 20px;
   }
 
   .site-footer p {
