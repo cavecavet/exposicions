@@ -124,7 +124,7 @@ body {
 
 .site-footer p {
   color: #666;
-  font-size: 13px;
+  font-size: 10px;
 }
 
 .site-footer p a {
@@ -445,6 +445,6 @@ body {
   }
 
   .site-footer p {
-    font-size: 10px;
+    font-size: 8px;
   }
 }
