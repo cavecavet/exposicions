@@ -82,7 +82,7 @@ body {
 /* Site Footer */
 .site-footer {
   background: white;
-  padding: 17px 24px;
+  padding: 6px 24px;
   text-align: center;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -106,20 +106,20 @@ body {
 }
 
 .site-footer-logos img {
-  height: 34px;
+  height: 37px;
   width: auto;
 }
 
 .site-footer-logos img.logo-urv {
-  height: 51px;
+  height: 56px;
 }
 
 .site-footer-logos img.logo-sm {
-  height: 23px;
+  height: 25px;
 }
 
 .site-footer-logos img.logo-lg {
-  height: 45px;
+  height: 50px;
 }
 
 .site-footer p {
@@ -420,7 +420,7 @@ body {
   }
 
   .site-footer {
-    padding: 5px 12px;
+    padding: 4px 12px;
   }
 
   .site-footer-logos {
@@ -429,19 +429,19 @@ body {
   }
 
   .site-footer-logos img {
-    height: 15px;
+    height: 17px;
   }
 
   .site-footer-logos img.logo-urv {
-    height: 23px;
+    height: 25px;
   }
 
   .site-footer-logos img.logo-sm {
-    height: 10px;
+    height: 11px;
   }
 
   .site-footer-logos img.logo-lg {
-    height: 20px;
+    height: 22px;
   }
 
   .site-footer p {
