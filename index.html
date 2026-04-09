@@ -14,7 +14,7 @@
       <img src="images/logos/Logo00.png" alt="Cave Cavet">
       <span>Associació Cave Cavet</span>
     </a>
-    <h1>Exposició fotogràfica del Cavet</h1>
+    <h1>Exposició fotogràfica i artística del Cavet</h1>
     <a class="site-header-instagram" href="http://www.instagram.com/cave.cavet" target="_blank" rel="noopener">
       <img src="images/logos/Insta.png" alt="Instagram">
       @cave.cavet
@@ -73,6 +73,36 @@
     </div>
   </div>
 
+  <!-- Estela Section View -->
+  <div class="view" id="estelaView">
+    <div class="estela-container">
+      <div class="estela-header">
+        <div class="estela-title-block">
+          <div class="estela-subtitle">EXPOSICIÓ</div>
+          <h2 class="estela-title">Entre Luz y Silencio</h2>
+          <div class="estela-artist">Estela Trenado Moreno</div>
+          <a class="estela-instagram" href="https://www.instagram.com/es.tel.art" target="_blank" rel="noopener">
+            <img src="images/logos/Insta.png" alt="Instagram"> @es.tel.art
+          </a>
+          <p class="estela-tagline">viaje hacia la introspección</p>
+        </div>
+      </div>
+      <div class="estela-grid" id="estelaGrid"></div>
+      <div class="estela-actions">
+        <a class="btn-secondary" href="#/">Tornar a la galeria</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-inner" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <img id="lightboxImg" src="" alt="">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+
   <!-- Not Found -->
   <div class="view" id="notFoundView">
     <div class="not-found">
@@ -123,6 +153,19 @@
   </footer>
 
   <script>
+    const estelaSection = {
+      id: 'estela',
+      title: 'Entre Luz y Silencio',
+      artist: 'Estela Trenado Moreno',
+      coverImage: 'images/Estela.jpeg',
+      paintings: [
+        { title: 'Portada', image: 'images/Estela.jpeg' },
+        { title: 'Posidonia', image: 'images/Posi.jpg' },
+        { title: 'Luz', image: 'images/Luz.jpg' },
+        { title: 'Silencio', image: 'images/Silencio.jpg' }
+      ]
+    };
+
     let cardsData = [];
     let imagesData = [];
     let currentCardId = null;
@@ -147,10 +190,51 @@
       document.getElementById(viewId).classList.add('active');
     }
 
+    // Lightbox
+    function openLightbox(src, caption) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxCaption').textContent = caption;
+      document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    // Estela Section
+    function renderEstela() {
+      const grid = document.getElementById('estelaGrid');
+      grid.innerHTML = '';
+      estelaSection.paintings.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'estela-item';
+        el.onclick = () => openLightbox(p.image, p.title);
+        el.innerHTML = `
+          <img src="${p.image}" alt="${p.title}" loading="lazy">
+          <div class="estela-item-title">${p.title}</div>
+        `;
+        grid.appendChild(el);
+      });
+    }
+
     // Gallery
     function renderGallery() {
       const grid = document.getElementById('cardsGrid');
       grid.innerHTML = '';
+
+      // Special Estela card at the top
+      const estelaEl = document.createElement('div');
+      estelaEl.className = 'card-item card-item--special';
+      estelaEl.onclick = () => { location.hash = '#/estela'; };
+      estelaEl.innerHTML = `
+        <img src="${estelaSection.coverImage}" alt="${estelaSection.title}" loading="lazy">
+        <div class="card-info">
+          <div class="card-special-label">Exposició artística</div>
+          <div class="card-scientific" style="font-style:italic;font-size:15px">${estelaSection.title}</div>
+          <div class="card-common">${estelaSection.artist}</div>
+        </div>
+      `;
+      grid.appendChild(estelaEl);
 
       cardsData.forEach(card => {
         const imageUrl = getImageUrl(card.photoId);
@@ -212,6 +296,12 @@
       if (hash === '#/' || hash === '#' || hash === '') {
         renderGallery();
         showView('galleryView');
+        return;
+      }
+
+      if (hash === '#/estela') {
+        renderEstela();
+        showView('estelaView');
         return;
       }
 
