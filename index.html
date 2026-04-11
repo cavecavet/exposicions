@@ -237,8 +237,9 @@
       grid.appendChild(estelaEl);
 
       cardsData.forEach(card => {
-        const imageUrl = getImageUrl(card.photoId);
-        if (!imageUrl) return;
+        const img = imagesData.find(i => i.id === card.photoId);
+        if (!img) return;
+        const imageUrl = img.thumb || img.url;
 
         const el = document.createElement('div');
         el.className = 'card-item';
