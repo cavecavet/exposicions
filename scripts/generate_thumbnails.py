@@ -23,13 +23,17 @@ def generate_thumbnail(src_path: Path, dst_path: Path) -> bool:
     """Generate a resized JPEG thumbnail. Returns True if created, False if already exists."""
     if dst_path.exists():
         return False
-    with Image.open(src_path) as img:
-        img = img.convert('RGB')
-        w, h = img.size
-        if w > MAX_WIDTH:
-            ratio = MAX_WIDTH / w
-            img = img.resize((MAX_WIDTH, int(h * ratio)), Image.LANCZOS)
-        img.save(dst_path, 'JPEG', quality=QUALITY, optimize=True)
+    try:
+        with Image.open(src_path) as img:
+            img = img.convert('RGB')
+            w, h = img.size
+            if w > MAX_WIDTH:
+                ratio = MAX_WIDTH / w
+                img = img.resize((MAX_WIDTH, int(h * ratio)), Image.LANCZOS)
+            img.save(dst_path, 'JPEG', quality=QUALITY, optimize=True)
+    except Exception as exc:
+        print(f"  ERROR:    {src_path.name} ({exc})")
+        return False
     return True
 
 
@@ -63,9 +67,11 @@ def main():
 
         entry['thumb'] = thumb_url
 
-    with open(IMAGES_JSON, 'w', encoding='utf-8') as f:
+    tmp = IMAGES_JSON.with_suffix('.tmp')
+    with open(tmp, 'w', encoding='utf-8') as f:
         json.dump(images, f, indent=2, ensure_ascii=False)
         f.write('\n')
+    tmp.replace(IMAGES_JSON)
 
     print(f"\nDone: {created} created, {skipped} skipped.")
     print("images.json updated with 'thumb' fields.")
