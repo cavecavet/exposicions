@@ -179,9 +179,10 @@
       imagesData = await imagesRes.json();
     }
 
-    function getImageUrl(photoId) {
+    function getImageUrl(photoId, preferThumb = false) {
       const img = imagesData.find(i => i.id === photoId);
-      return img ? img.url : '';
+      if (!img) return '';
+      return (preferThumb && img.thumb) ? img.thumb : img.url;
     }
 
     // Views
@@ -237,9 +238,8 @@
       grid.appendChild(estelaEl);
 
       cardsData.forEach(card => {
-        const img = imagesData.find(i => i.id === card.photoId);
-        if (!img) return;
-        const imageUrl = img.thumb || img.url;
+        const imageUrl = getImageUrl(card.photoId, true);
+        if (!imageUrl) return;
 
         const el = document.createElement('div');
         el.className = 'card-item';
