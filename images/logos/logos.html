@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entitats Col·laboradores</title>
+<style>
+:root{
+--primary:#0f6c8c;
+--secondary:#4ea3c6;
+--background:#f7fafb;
+--text:#22313f;
+--card:#ffffff;
+}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+body{
+font-family:Segoe UI,Arial,sans-serif;
+background:var(--background);
+color:var(--text);
+line-height:1.6;
+}
+.hero{
+background:linear-gradient(135deg,#0f6c8c,#4ea3c6);
+color:white;
+text-align:center;
+padding:80px 20px;
+}
+.hero h1{
+font-size:3rem;
+font-weight:300;
+margin-bottom:15px;
+}
+.hero p{
+max-width:800px;
+margin:auto;
+opacity:.95;
+}
+.section{
+max-width:1400px;
+margin:auto;
+padding:60px 20px;
+}
+.section-title{
+text-align:center;
+margin-bottom:40px;
+}
+.section-title h2{
+color:var(--primary);
+margin-bottom:10px;
+}
+.logos-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:24px;
+}
+.logo-card{
+background:var(--card);
+border-radius:18px;
+padding:24px;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+display:flex;
+flex-direction:column;
+align-items:center;
+transition:.25s ease;
+}
+.logo-card:hover{
+transform:translateY(-4px);
+box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+.logo-link{
+text-decoration:none;
+color:inherit;
+width:100%;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+.logo-link:focus{
+outline:3px solid var(--secondary);
+outline-offset:4px;
+border-radius:8px;
+}
+.logo-card img{
+width:100%;
+max-width:180px;
+aspect-ratio:1/1;
+object-fit:contain;
+display:block;
+margin-bottom:16px;
+}
+.logo-card h3{
+color:var(--primary);
+text-align:center;
+font-size:1rem;
+min-height:3.5em;
+}
+.logo-error{
+width:180px;
+height:180px;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+border:2px dashed #ccc;
+border-radius:12px;
+background:#f0f0f0;
+color:#666;
+margin-bottom:16px;
+padding:10px;
+}
+footer{
+text-align:center;
+padding:40px;
+color:#666;
+}
+@media (max-width:768px){
+.hero{
+padding:60px 20px;
+}
+.hero h1{
+font-size:2rem;
+}
+.logo-card{
+padding:20px;
+}
+.logo-card img{
+max-width:150px;
+}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+<h1>L’AIGUA QUE ENS CONNECTA</h1>
+<p>
+Xarxa d’entitats, institucions i projectes vinculats al territori,
+la sostenibilitat, la divulgació, la salut i el Mediterrani.
+</p>
+</header>
+<section class="section">
+<div class="section-title">
+<h2>Entitats col·laboradores</h2>
+<p>Organitzacions participants</p>
+</div>
+<div class="logos-grid">
+<div class="logo-card">
+<a class="logo-link" href="https://cavecavet.org">
+<img src="Logo00.png" alt="Logo Associació Cave Cavet">
+<h3>Associació Cave Cavet</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://www.comaigua.cat/">
+<img src="Logo0.png" alt="Logo Comaigua">
+<h3>Comaigua</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://www.cambrils.cat">
+<img src="Logo1.svg" alt="Logo Ajuntament de Cambrils">
+<h3>Ajuntament de Cambrils</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://www.urv.cat">
+<img src="Logo2.png" alt="Logo Universitat Rovira i Virgili">
+<h3>Universitat Rovira i Virgili</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://www.hortojardi.com">
+<img src="Logo3.jpg" alt="Logo Institut d’Horticultura i Jardineria de Reus">
+<h3>Institut d’Horticultura i Jardineria de Reus</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://minka-sdg.org">
+<img src="Logo4.png" alt="Logo MINKA">
+<h3>MINKA</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://www.ihtcambrils.cat">
+<img src="Logo5.png" alt="Logo Institut d’Hoteleria i Turisme de Cambrils">
+<h3>Institut d’Hoteleria i Turisme de Cambrils</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://simbiosy.com/">
+<img src="Logo6.png" alt="Logo Símbiosy">
+<h3>Símbiosy</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://fadri.cafe/">
+<img src="Logo7.jpg" alt="Logo Café Fadrí">
+<h3>Café Fadrí</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://glupsdiving.com/">
+<img src="Logo8.jpg" alt="Logo Glups Diving">
+<h3>Glups Diving</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://allbluediving.com/">
+<img src="Logo9.jpg" alt="Logo All Blue Diving">
+<h3>All Blue Diving</h3>
+</a>
+</div>
+<div class="logo-card">
+<a class="logo-link" href="https://www.dipta.cat/">
+<img src="Logo7.png" alt="Logo Diputació de Tarragona">
+<h3>Diputació de Tarragona</h3>
+</a>
+</div>
+</div>
+</section>
+<footer>
+Natura · Salut · Art · Territori
+</footer>
+<script>
+document.querySelectorAll("img").forEach(img => {
+img.addEventListener("error", function(){
+const originalSrc = this.getAttribute("src");
+const placeholder = document.createElement("div");
+placeholder.className = "logo-error";
+placeholder.textContent = "No s’ha trobat " + originalSrc;
+this.parentNode.replaceChild(placeholder, this);
+console.warn("Logo no encontrado:", originalSrc);
+});
+});
+</script>
+</body>
+</html>
+
