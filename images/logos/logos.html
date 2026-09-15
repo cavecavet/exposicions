@@ -146,96 +146,53 @@ la sostenibilitat, la divulgació, la salut i el Mediterrani.
 <h2>Entitats col·laboradores</h2>
 <p>Organitzacions participants</p>
 </div>
-<div class="logos-grid">
-<div class="logo-card">
-<a class="logo-link" href="https://cavecavet.org">
-<img src="Logo00.png" alt="Logo Associació Cave Cavet">
-<h3>Associació Cave Cavet</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://www.comaigua.cat/">
-<img src="Logo0.png" alt="Logo Comaigua">
-<h3>Comaigua</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://www.cambrils.cat">
-<img src="Logo1.svg" alt="Logo Ajuntament de Cambrils">
-<h3>Ajuntament de Cambrils</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://www.urv.cat">
-<img src="Logo2.png" alt="Logo Universitat Rovira i Virgili">
-<h3>Universitat Rovira i Virgili</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://www.hortojardi.com">
-<img src="Logo3.jpg" alt="Logo Institut d’Horticultura i Jardineria de Reus">
-<h3>Institut d’Horticultura i Jardineria de Reus</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://minka-sdg.org">
-<img src="Logo4.png" alt="Logo MINKA">
-<h3>MINKA</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://www.ihtcambrils.cat">
-<img src="Logo5.png" alt="Logo Institut d’Hoteleria i Turisme de Cambrils">
-<h3>Institut d’Hoteleria i Turisme de Cambrils</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://simbiosy.com/">
-<img src="Logo6.png" alt="Logo Símbiosy">
-<h3>Símbiosy</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://fadri.cafe/">
-<img src="Logo7.jpg" alt="Logo Café Fadrí">
-<h3>Café Fadrí</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://glupsdiving.com/">
-<img src="Logo8.jpg" alt="Logo Glups Diving">
-<h3>Glups Diving</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://allbluediving.com/">
-<img src="Logo9.jpg" alt="Logo All Blue Diving">
-<h3>All Blue Diving</h3>
-</a>
-</div>
-<div class="logo-card">
-<a class="logo-link" href="https://www.dipta.cat/">
-<img src="Logo7.png" alt="Logo Diputació de Tarragona">
-<h3>Diputació de Tarragona</h3>
-</a>
-</div>
-</div>
+<div class="logos-grid" id="logosGrid"></div>
 </section>
 <footer>
 Natura · Salut · Art · Territori
 </footer>
 <script>
-document.querySelectorAll("img").forEach(img => {
-img.addEventListener("error", function(){
-const originalSrc = this.getAttribute("src");
-const placeholder = document.createElement("div");
-placeholder.className = "logo-error";
-placeholder.textContent = "No s’ha trobat " + originalSrc;
-this.parentNode.replaceChild(placeholder, this);
-console.warn("Logo no encontrado:", originalSrc);
-});
-});
+function attachImageFallback(img) {
+  img.addEventListener("error", function(){
+    const originalSrc = this.getAttribute("src");
+    const placeholder = document.createElement("div");
+    placeholder.className = "logo-error";
+    placeholder.textContent = "No s’ha trobat " + originalSrc;
+    this.parentNode.replaceChild(placeholder, this);
+    console.warn("Logo no encontrado:", originalSrc);
+  });
+}
+
+async function renderLogos() {
+  const grid = document.getElementById("logosGrid");
+  try {
+    const res = await fetch("logos.json", { cache: "no-store" });
+    const logos = await res.json();
+    grid.innerHTML = "";
+    logos.forEach(logo => {
+      const card = document.createElement("div");
+      card.className = "logo-card";
+      const link = document.createElement("a");
+      link.className = "logo-link";
+      link.href = logo.url || "#";
+      const img = document.createElement("img");
+      img.src = logo.image;
+      img.alt = logo.alt || ("Logo " + logo.name);
+      attachImageFallback(img);
+      const h3 = document.createElement("h3");
+      h3.textContent = logo.name;
+      link.appendChild(img);
+      link.appendChild(h3);
+      card.appendChild(link);
+      grid.appendChild(card);
+    });
+  } catch (err) {
+    grid.innerHTML = "<p>No s’han pogut carregar les entitats col·laboradores.</p>";
+    console.error("Error carregant logos.json:", err);
+  }
+}
+
+renderLogos();
 </script>
 </body>
 </html>
-
