@@ -115,41 +115,7 @@
 
   <!-- Site Footer -->
   <footer class="site-footer">
-    <div class="site-footer-logos">
-      <a href="https://www.cambrils.cat" target="_blank" rel="noopener">
-        <img src="images/logos/Logo1.svg" alt="Ajuntament de Cambrils">
-      </a>
-      <a href="https://www.comaigua.cat/" target="_blank" rel="noopener">
-        <img src="images/logos/Logo0.png" alt="Comaigua" class="logo-sm">
-      </a>
-      <a href="https://www.urv.cat" target="_blank" rel="noopener">
-        <img src="images/logos/Logo2.png" alt="Universitat Rovira i Virgili" class="logo-urv">
-      </a>
-      <a href="https://www.hortojardi.com" target="_blank" rel="noopener">
-        <img src="images/logos/Logo3.jpg" alt="Institut d'Horticultura i Jardineria de Reus">
-      </a>
-      <a href="https://minka-sdg.org" target="_blank" rel="noopener">
-        <img src="images/logos/Logo4.png" alt="MINKA" class="logo-sm">
-      </a>
-      <a href="https://www.inshotturcambrils.com/" target="_blank" rel="noopener">
-        <img src="images/logos/Logo5.png" alt="Institut d'Hoteleria i Turisme de Cambrils">
-      </a>
-      <a href="https://simbiosy.com/" target="_blank" rel="noopener">
-        <img src="images/logos/Logo6.png" alt="Símbiosy">
-      </a>
-      <a href="https://fadri.cafe/" target="_blank" rel="noopener">
-        <img src="images/logos/Logo7.jpg" alt="Café fadrí">
-      </a>
-      <a href="https://glupsdiving.com/" target="_blank" rel="noopener">
-        <img src="images/logos/Logo8.jpg" alt="Glups Diving" class="logo-lg">
-      </a>
-      <a href="https://allbluediving.com/" target="_blank" rel="noopener">
-        <img src="images/logos/Logo9.jpg" alt="All blue diving" class="logo-lg">
-      </a>
-      <a href="https://www.dipta.cat/" target="_blank" rel="noopener">
-        <img src="images/logos/Logo7.png" alt="Diputació de Tarragona">
-      </a>
-    </div>
+    <div class="site-footer-logos" id="footerLogos"></div>
     <p><a href="images/logos/logos.html">Entitats col·laboradores</a></p>
     <p><a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">Copyleft CC by 4.0</a></p>
   </footer>
@@ -171,6 +137,40 @@
     let cardsData = [];
     let imagesData = [];
     let currentCardId = null;
+
+    // Mida especial per a alguns logos del peu de pàgina (la resta usa l'alçada per defecte)
+    const FOOTER_LOGO_SIZE = {
+      'Universitat Rovira i Virgili': 'logo-urv',
+      'Comaigua': 'logo-sm',
+      'MINKA': 'logo-sm',
+      'Glups Diving': 'logo-lg',
+      'All Blue Diving': 'logo-lg'
+    };
+
+    async function renderFooterLogos() {
+      const box = document.getElementById('footerLogos');
+      try {
+        const res = await fetch('https://radio.cavecavet.org/api/logos', { cache: 'no-store' });
+        const data = await res.json();
+        const logos = (data.logos || []).filter(l => !/cavecavet\.org\/?$/.test(l.url || ''));
+        box.innerHTML = '';
+        logos.forEach(l => {
+          const a = document.createElement('a');
+          a.href = l.url || '#';
+          a.target = '_blank';
+          a.rel = 'noopener';
+          const img = document.createElement('img');
+          img.src = l.image;
+          img.alt = l.alt || l.name;
+          const sizeClass = FOOTER_LOGO_SIZE[l.name];
+          if (sizeClass) img.className = sizeClass;
+          a.appendChild(img);
+          box.appendChild(a);
+        });
+      } catch (err) {
+        console.error('Error carregant els logos del peu de pàgina:', err);
+      }
+    }
 
     async function loadData() {
       const [cardsRes, imagesRes] = await Promise.all([
@@ -329,6 +329,7 @@
       handleRoute();
       window.addEventListener('hashchange', handleRoute);
     });
+    renderFooterLogos();
   </script>
 </body>
 </html>
