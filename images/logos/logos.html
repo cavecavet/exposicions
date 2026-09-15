@@ -166,8 +166,9 @@ function attachImageFallback(img) {
 async function renderLogos() {
   const grid = document.getElementById("logosGrid");
   try {
-    const res = await fetch("logos.json", { cache: "no-store" });
-    const logos = await res.json();
+    const res = await fetch("https://radio.cavecavet.org/api/logos", { cache: "no-store" });
+    const data = await res.json();
+    const logos = data.logos || [];
     grid.innerHTML = "";
     logos.forEach(logo => {
       const card = document.createElement("div");
@@ -188,7 +189,7 @@ async function renderLogos() {
     });
   } catch (err) {
     grid.innerHTML = "<p>No s’han pogut carregar les entitats col·laboradores.</p>";
-    console.error("Error carregant logos.json:", err);
+    console.error("Error carregant els logos:", err);
   }
 }
 
