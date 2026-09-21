@@ -22,6 +22,14 @@
     </a>
   </header>
 
+  <!-- Exposició vigent: dades de l'administració (admin.cavecavet.org/actes, cicle «Exposicions») -->
+  <section class="expo-info" id="expoInfo" hidden>
+    <h2 id="expoTitle"></h2>
+    <p class="expo-meta" id="expoMeta"></p>
+    <p class="expo-authors" id="expoAuthors"></p>
+    <p class="expo-desc" id="expoDesc"></p>
+  </section>
+
   <!-- Gallery View -->
   <div class="view" id="galleryView">
     <div class="gallery-container">
@@ -331,6 +339,25 @@
       window.addEventListener('hashchange', handleRoute);
     });
     renderFooterLogos();
+
+    // Capçalera de l'exposició vigent (o la propera). Si l'API no respon o no n'hi ha cap, la web funciona igual.
+    async function renderExpoInfo() {
+      try {
+        const r = await fetch('https://radio.cavecavet.org/api/actes?cicle=exposicions&tipus=exposicio', { cache: 'no-store' });
+        if (!r.ok) return;
+        const list = (await r.json()).actes || [];
+        const a = list.find((x) => x.estat === 'en_curs') || list.find((x) => x.estat === 'propera');
+        if (!a) return;
+        const fmt = (iso) => new Date(iso + 'T00:00:00').toLocaleDateString('ca-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+        const dates = a.data_fi && a.data_fi !== a.data_inici ? 'Del ' + fmt(a.data_inici) + ' al ' + fmt(a.data_fi) : fmt(a.data_inici);
+        document.getElementById('expoTitle').textContent = a.titol;
+        document.getElementById('expoMeta').textContent = [a.lloc, dates, a.horari].filter(Boolean).join(' · ');
+        document.getElementById('expoAuthors').textContent = a.participants ? 'Autors: ' + a.participants : '';
+        document.getElementById('expoDesc').textContent = a.descripcio || '';
+        document.getElementById('expoInfo').hidden = false;
+      } catch (e) { /* sense la capçalera, la web funciona igual */ }
+    }
+    renderExpoInfo();
   </script>
   <script src="https://radio.cavecavet.org/logos/embed.js" async></script>
 </body>
